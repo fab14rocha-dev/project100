@@ -1,10 +1,15 @@
 # 13. Project 100
 
 ## What It Is
-A landing page for "Project 100" — Fabricio's personal challenge to help 100 businesses solve real problems, building the solution for free in exchange for an honest review. Uses AI as the tool to build solutions, not the product itself.
+A landing page for "Project 100" — Fabricio's personal challenge to help 100 people solve real problems, building the solution for free. Uses AI as the tool to build solutions, not the product itself.
 
 ## Who It's For
-Business owners with a real problem they don't know how to solve. Any industry, any size.
+Anyone with a real problem worth solving. Any industry, any size.
+
+## Live URLs
+- Landing page: https://project100.dev
+- Portfolio: https://portfolio.project100.dev
+- GitHub repo: https://github.com/fab14rocha-dev/project100
 
 ## The Concept
 Simple goal: help 100 people. 100 different problems, 100 different solutions. Free. The counter on the page tracks progress (completed + in progress).
