@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project #100 — Free AI solutions for 100 people</title>
+  <meta name="description" content="Fabricio is helping 100 people solve real problems with AI, for free. Tell him about your problem. If he can help, he'll build the solution."/>
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type"        content="website"/>
+  <meta property="og:title"       content="Project #100 — Free AI solutions for 100 people"/>
+  <meta property="og:description" content="Fabricio is helping 100 people solve real problems with AI, for free. Tell him about your problem. If he can help, he'll build the solution."/>
+  <!-- Replace the URL below with your live domain once deployed -->
+  <meta property="og:url"         content="https://project100.dev"/>
+  <meta property="og:image"       content="https://project100.dev/2.%20Images/og.jpg.png"/>
+  <meta name="twitter:card"       content="summary_large_image"/>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+  <!-- Google Analytics — replace G-6D01FZTZ0R with your Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6D01FZTZ0R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-6D01FZTZ0R');
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="5. Styles/style.css"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">Project #100</div>
+    <button class="nav-cta open-form-btn">Start here</button>
+  </nav>
+
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-tag">Project #100</p>
+      <h1 class="hero-headline">I want to help 100 people<br>solve real problems.</h1>
+      <p class="hero-sub">Got a real problem that's worth solving? I'd love to hear about it.*</p>
+      <button class="cta-btn open-form-btn">Tell me about your problem</button>
+      <p class="hero-note">4 completed &nbsp;·&nbsp; 2 in progress &nbsp;·&nbsp; 94 spots left</p>
+      <p class="hero-asterisk">* I invest my own time and money into every project. You just need a problem worth solving.</p>
+    </div>
+    <a href="#offer" class="scroll-hint" aria-label="Scroll down"></a>
+  </section>
+
+
+  <!-- WHAT YOU GET -->
+  <section id="offer" class="offer">
+    <div class="container">
+      <h2 class="section-headline">Here's how it works.</h2>
+      <div class="offer-cards">
+        <div class="offer-card">
+          <div class="offer-number">01</div>
+          <h3>Tell me about your problem</h3>
+          <p>Fill in the short form and describe what you want to solve.</p>
+        </div>
+        <div class="offer-card">
+          <div class="offer-number">02</div>
+          <h3>We talk through it</h3>
+          <p>We get on a quick call and figure out together the best approach to take.</p>
+        </div>
+        <div class="offer-card">
+          <div class="offer-number">03</div>
+          <h3>I build the solution</h3>
+          <p>I design and build it myself and cover any costs involved.</p>
+        </div>
+      </div>
+      <p class="offer-note">I invest my own time and money into every project. You just need a real problem worth solving.</p>
+      <a href="#testimonials" class="scroll-hint scroll-hint--inline" aria-label="Scroll down"></a>
+    </div>
+  </section>
+
+
+
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <p class="section-tag">What people say</p>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"Wow that was truly incredible — in less than 24 hours you were able to create this. I loved it. You put a smile on my face. Fabricio you are very passionate, talented, and generously helped me with my guest experiences project. From the first interaction you worked immediately and exceeded my expectations!"</p>
+        <div class="testimonial-author">
+          <p class="testimonial-name">Joseph LoBello</p>
+          <p class="testimonial-role">Project #4 — XPerience Intake Form</p>
+        </div>
+      </div>
+      <a href="#final-cta" class="scroll-hint scroll-hint--inline" aria-label="Scroll down"></a>
+    </div>
+  </section>
+
+
+  <!-- FINAL CTA -->
+  <section id="final-cta" class="final-cta">
+    <div class="container">
+      <h2 class="section-headline">Want to be one of the 100?</h2>
+      <p class="final-sub">Fill the quick form with a few details and I'll get back to you.</p>
+      <button class="cta-btn open-form-btn">Join the 100</button>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a href="#" class="footer-link">Project #100</a>
+    <span class="footer-sep">·</span>
+    <a href="https://portfolio.project100.dev" class="footer-link" target="_blank" rel="noopener noreferrer">See all projects</a>
+  </footer>
+
+
+  <!-- ============================================================
+       FORM OVERLAY
+       ============================================================ -->
+  <div class="form-overlay" id="formOverlay" aria-modal="true" role="dialog">
+
+    <div class="form-modal">
+
+    <div class="overlay-header">
+      <button class="overlay-back" id="overlayBack" aria-label="Go back">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back
+      </button>
+
+      <div class="form-progress">
+        <div class="form-progress-bar" id="progressBar"></div>
+      </div>
+
+      <button class="overlay-close" id="overlayClose" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="overlay-body">
+      <div class="form-steps" id="formSteps">
+
+        <!-- Step 1: Name -->
+        <div class="form-step" data-step="1">
+          <p class="form-question">First, what's your name?</p>
+          <input type="text" class="form-input" id="contactName" placeholder="Your name..." autocomplete="off"/>
+          <button class="form-next-btn" id="step1NextBtn">Continue</button>
+        </div>
+
+        <!-- Step 2: Email -->
+        <div class="form-step" data-step="2">
+          <p class="form-question">And your email?</p>
+          <p class="form-hint">So I can follow up, even if life gets in the way.</p>
+          <input type="email" class="form-input" id="contactEmail" placeholder="Your email..." autocomplete="off"/>
+          <button class="form-next-btn" id="step2NextBtn">Continue</button>
+        </div>
+
+        <!-- Step 3: Business type -->
+        <div class="form-step" data-step="3">
+          <p class="form-question">What type of business do you run?</p>
+          <p class="form-hint">e.g. restaurant, online shop, law firm, marketing agency</p>
+          <input type="text" class="form-input" id="businessType" placeholder="Your business..." autocomplete="off"/>
+          <button class="form-next-btn" id="step3NextBtn">Continue</button>
+        </div>
+
+        <!-- Step 4: Biggest time drain -->
+        <div class="form-step" data-step="4">
+          <p class="form-question">What's the one task eating most of your time right now?</p>
+          <p class="form-hint">Be specific — this helps me find the right AI opportunity for you.</p>
+          <textarea class="form-textarea" id="timeDrain" placeholder="Tell me..."></textarea>
+          <button class="form-next-btn" id="step4NextBtn">Continue</button>
+        </div>
+
+        <!-- Step 5: Revenue -->
+        <div class="form-step" data-step="5">
+          <p class="form-question">What's your annual revenue?</p>
+          <div class="choice-grid choice-grid--vertical">
+            <button class="choice-btn choice-btn--wide" data-value="no-revenue">No revenue yet</button>
+            <button class="choice-btn choice-btn--wide" data-value="under-10k">Under £10k</button>
+            <button class="choice-btn choice-btn--wide" data-value="10k-50k">£10k – £50k</button>
+            <button class="choice-btn choice-btn--wide" data-value="50k-200k">£50k – £200k</button>
+            <button class="choice-btn choice-btn--wide" data-value="200k-plus">£200k+</button>
+          </div>
+        </div>
+
+        <!-- Step 6: Phone -->
+        <div class="form-step" data-step="6">
+          <p class="form-question">Last one — what's your phone number?</p>
+          <p class="form-hint">WhatsApp works too. I'll use this to book your discovery call.</p>
+          <input type="tel" class="form-input" id="contactPhone" placeholder="Your phone / WhatsApp..." autocomplete="off"/>
+          <button class="form-next-btn" id="submitBtn">Send it over</button>
+        </div>
+
+        <!-- Step 8: Book call (shown after successful submission) -->
+        <div class="form-step" data-step="8">
+          <p class="form-question">You're in. Book your free 15-min call.</p>
+          <p class="form-hint">Pick a time and we'll talk through your business and exactly how AI can help.</p>
+          <div id="calendlyWidget" style="min-width:280px;height:660px;"></div>
+          <p class="skip-note">Prefer not to book now? I'll reach out to you within 48 hours.</p>
+        </div>
+
+      </div>
+    </div>
+
+    </div> <!-- /.form-modal -->
+  </div>
+
+
+  <!-- ============================================================
+       CONFIRM CLOSE MODAL
+       ============================================================ -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-card">
+      <p class="confirm-title">Leave the form?</p>
+      <p class="confirm-sub">Your answers will be lost.</p>
+      <div class="confirm-actions">
+        <button class="confirm-btn confirm-btn--leave" id="confirmLeave">Leave</button>
+        <button class="confirm-btn confirm-btn--stay"  id="confirmStay">Keep going</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('UcV5udj6LZbempulE');</script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Firebase compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <!-- Calendly -->
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+  <!-- App scripts -->
+  <script src="3. Scripts/firebase.js"></script>
+  <script src="3. Scripts/form.js"></script>
+  <script src="3. Scripts/main.js"></script>
+
+</body>
+</html>

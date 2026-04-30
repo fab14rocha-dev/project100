@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — AI for Business</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0a0a0a;
+      --bg-surface: #111;
+      --bg-card:    #141414;
+      --accent:     #4F85F6;
+      --accent-dim: rgba(79,133,246,0.12);
+      --text:       #F0F0F0;
+      --text-muted: #888;
+      --text-dim:   #444;
+      --border:     rgba(255,255,255,0.07);
+      --green:      #34D399;
+      --yellow:     #FBBF24;
+      --red:        #F87171;
+      --radius:     10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Login overlay ── */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .login-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .login-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .login-card p  { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+
+    .login-input {
+      display: block;
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .login-input:focus { border-color: var(--accent); }
+
+    .login-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .login-btn:hover { background: #6B9BF8; }
+    .login-error { margin-top: 12px; font-size: 13px; color: var(--red); display: none; }
+
+    /* ── Main layout ── */
+    .admin { display: none; }
+    .admin.visible { display: block; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-logo { font-size: 16px; font-weight: 700; }
+    .topbar-sub  { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .refresh-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .main { padding: 40px; max-width: 1100px; margin: 0 auto; }
+
+    /* ── Stat cards ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+    }
+
+    .stat-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+    .stat-value { font-size: 32px; font-weight: 700; line-height: 1; }
+    .stat-sub   { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+    .stat-value.green  { color: var(--green); }
+    .stat-value.accent { color: var(--accent); }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Funnel ── */
+    .funnel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .funnel-header {
+      display: grid;
+      grid-template-columns: 160px 1fr 60px 60px 90px;
+      gap: 16px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .funnel-header span {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    .funnel-header span:first-child { text-align: left; }
+    .funnel-header span:nth-child(2) { text-align: left; }
+
+    .funnel-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 60px 60px 90px;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .funnel-label { font-size: 13px; color: var(--text-muted); }
+
+    .funnel-bar-track {
+      background: var(--bg-surface);
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .funnel-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    .funnel-count { font-size: 13px; font-weight: 600; text-align: right; }
+    .funnel-pct   { font-size: 12px; color: var(--text-muted); text-align: right; }
+
+    .funnel-row.drop .funnel-bar-fill { background: var(--red); }
+    .funnel-row.completed .funnel-bar-fill { background: var(--green); }
+
+    /* ── Submissions table ── */
+    .table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-title { font-size: 14px; font-weight: 600; }
+    .table-count { font-size: 12px; color: var(--text-muted); }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 14px 24px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .badge-green  { background: rgba(52,211,153,0.15); color: var(--green); }
+    .badge-yellow { background: rgba(251,191,36,0.15);  color: var(--yellow); }
+    .badge-red    { background: rgba(248,113,113,0.15); color: var(--red); }
+    .badge-blue   { background: var(--accent-dim);      color: var(--accent); }
+
+    .td-muted { color: var(--text-muted); }
+    .td-long  { max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── Breakdown row ── */
+    .breakdown-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .breakdown-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .breakdown-title { font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+
+    .breakdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .breakdown-item-label { font-size: 13px; color: var(--text-muted); }
+    .breakdown-item-count { font-size: 13px; font-weight: 600; }
+
+    .breakdown-bar-track {
+      flex: 1;
+      margin: 0 12px;
+      height: 4px;
+      background: var(--bg-surface);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .breakdown-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 14px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn:hover  { color: var(--text); }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+
+    .tab-panel         { display: none; }
+    .tab-panel.active  { display: block; }
+
+    /* ── Empty / loading states ── */
+    .empty   { padding: 48px; text-align: center; color: var(--text-dim); font-size: 13px; }
+    .loading { padding: 48px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
+    /* ── Leads filters ── */
+    .leads-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-search {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 8px 14px;
+      outline: none;
+      width: 220px;
+      transition: border-color 0.2s;
+    }
+
+    .filter-search:focus { border-color: var(--accent); }
+    .filter-search::placeholder { color: var(--text-dim); }
+
+    .filter-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 8px 14px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      appearance: none;
+      padding-right: 28px;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .filter-select:focus { border-color: var(--accent); }
+    .filter-select option { background: var(--bg-surface); }
+
+    .filter-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Leads table ── */
+    .leads-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .leads-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .leads-table col.col-date     { width: 100px; }
+    .leads-table col.col-contact  { width: 17%; }
+    .leads-table col.col-business { width: 13%; }
+    .leads-table col.col-drain    { width: 26%; }
+    .leads-table col.col-revenue  { width: 100px; }
+    .leads-table col.col-phone    { width: 130px; }
+    .leads-table col.col-booked   { width: 110px; }
+    .leads-table col.col-actions  { width: 130px; }
+
+    .leads-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+    }
+
+    .leads-table td {
+      padding: 13px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      overflow-wrap: break-word;
+    }
+
+    .leads-table tr:last-child td { border-bottom: none; }
+    .leads-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .cell-name   { font-weight: 500; }
+    .cell-muted  { color: var(--text-muted); font-size: 12px; margin-top: 2px; word-break: break-all; }
+    .cell-clamp  { }
+
+    .clamp-text {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.5;
+    }
+
+    .clamp-text.expanded {
+      display: block;
+      -webkit-line-clamp: unset;
+    }
+
+    .expand-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 2px 0;
+      margin-top: 4px;
+      display: block;
+    }
+
+    .expand-btn:hover { text-decoration: underline; }
+
+    /* ── Action buttons ── */
+    .actions { display: flex; gap: 6px; white-space: nowrap; }
+
+    .action-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-qualify {
+      background: rgba(52,211,153,0.1);
+      color: var(--green);
+      border-color: rgba(52,211,153,0.25);
+    }
+    .action-qualify:hover { background: rgba(52,211,153,0.2); }
+
+    .action-archive {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
+    .action-archive:hover { color: var(--red); border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.07); }
+
+    .action-restore {
+      background: rgba(79,133,246,0.08);
+      color: var(--accent);
+      border-color: rgba(79,133,246,0.25);
+    }
+    .action-restore:hover { background: rgba(79,133,246,0.15); }
+
+    /* ── CRM status selector ── */
+    .crm-select {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      padding: 5px 10px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+    }
+
+    .crm-select:focus { border-color: var(--accent); }
+    .crm-select option { background: var(--bg-surface); }
+    .crm-select.status-contact    { color: var(--accent);  border-color: rgba(79,133,246,0.4); }
+    .crm-select.status-contacted  { color: var(--yellow); border-color: rgba(251,191,36,0.4); }
+    .crm-select.status-inprogress { color: var(--green);  border-color: rgba(52,211,153,0.4); }
+
+    /* ── Tab counters ── */
+    .tab-badge {
+      display: inline-block;
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── Ads form ── */
+    .ads-add-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .ads-add-title { font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+
+    .ads-form-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .ads-field { display: flex; flex-direction: column; gap: 6px; }
+
+    .ads-field label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .ads-input, .ads-select {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 8px 12px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 120px;
+    }
+
+    .ads-input:focus, .ads-select:focus { border-color: var(--accent); }
+    .ads-input::placeholder { color: var(--text-dim); }
+    .ads-select option { background: var(--bg-surface); }
+    .ads-input.wide { width: 150px; }
+
+    .ads-save-btn {
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      align-self: flex-end;
+    }
+
+    .ads-save-btn:hover { background: #6B9BF8; }
+    .ads-save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Ads stats row ── */
+    .ads-stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* ── Ads table ── */
+    .ads-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .ads-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .ads-table col.col-ads-period   { width: 110px; }
+    .ads-table col.col-ads-platform { width: 100px; }
+    .ads-table col.col-ads-spend    { width: 90px; }
+    .ads-table col.col-ads-clicks   { width: 80px; }
+    .ads-table col.col-ads-impr     { width: 110px; }
+    .ads-table col.col-ads-leads    { width: 70px; }
+    .ads-table col.col-ads-cpl      { width: 80px; }
+    .ads-table col.col-ads-del      { width: 80px; }
+
+    .ads-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ads-table td {
+      padding: 13px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .ads-table tr:last-child td { border-bottom: none; }
+    .ads-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .platform-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .platform-google { background: rgba(66,133,244,0.15);  color: #6ba3f7; }
+    .platform-meta   { background: rgba(24,119,242,0.15);  color: #60a5fa; }
+    .platform-tiktok { background: rgba(105,201,208,0.15); color: #5ecbd4; }
+    .platform-other  { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+    .action-delete {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-delete:hover { color: var(--red); border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.07); }
+
+    @media (max-width: 900px) {
+      .stats-row     { grid-template-columns: repeat(2, 1fr); }
+      .ads-stats-row { grid-template-columns: repeat(2, 1fr); }
+      .breakdown-row { grid-template-columns: 1fr; }
+      .topbar, .main { padding: 20px 24px; }
+      .tabs          { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <h2>Admin</h2>
+      <p>Enter your password to continue</p>
+      <input type="password" class="login-input" id="passwordInput" placeholder="Password..." autocomplete="off"/>
+      <button class="login-btn" id="loginBtn">Enter</button>
+      <p class="login-error" id="loginError">Wrong password. Try again.</p>
+    </div>
+  </div>
+
+
+  <!-- ADMIN DASHBOARD -->
+  <div class="admin" id="adminPanel">
+
+    <div class="topbar">
+      <div>
+        <div class="topbar-logo">AI for Business — Admin</div>
+        <div class="topbar-sub" id="lastUpdated">Loading...</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="refresh-btn" id="demoBtn">Load demo data</button>
+        <button class="refresh-btn" id="refreshBtn">↺ Live data</button>
+        <button class="refresh-btn" id="clearBtn" style="color:#F87171;border-color:rgba(248,113,113,0.25);">Clear all data</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="summary">Summary</button>
+      <button class="tab-btn" data-tab="leads">New leads <span class="tab-badge" id="badge-leads">0</span></button>
+      <button class="tab-btn" data-tab="qualified">Qualified <span class="tab-badge" id="badge-qualified">0</span></button>
+      <button class="tab-btn" data-tab="archived">Archived <span class="tab-badge" id="badge-archived">0</span></button>
+      <button class="tab-btn" data-tab="partial">Partial <span class="tab-badge" id="badge-partial">0</span></button>
+      <button class="tab-btn" data-tab="ads">Ads</button>
+    </div>
+
+    <div class="main">
+
+      <!-- TAB 1: Summary -->
+      <div class="tab-panel active" id="tab-summary">
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Form opens</div>
+            <div class="stat-value accent" id="statSessions">—</div>
+            <div class="stat-sub">people started the form</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Completed</div>
+            <div class="stat-value green" id="statCompleted">—</div>
+            <div class="stat-sub">submitted their details</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Completion rate</div>
+            <div class="stat-value" id="statRate">—</div>
+            <div class="stat-sub">of starters finished</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Biggest drop-off</div>
+            <div class="stat-value" id="statDropStep" style="font-size:20px; padding-top:6px;">—</div>
+            <div class="stat-sub" id="statDropSub">where most people leave</div>
+          </div>
+        </div>
+
+        <p class="section-title">Form funnel</p>
+        <div class="funnel-card" id="funnelCard">
+          <div class="loading">Loading funnel data...</div>
+        </div>
+
+        <div class="breakdown-row">
+          <div class="breakdown-card">
+            <div class="breakdown-title">Revenue breakdown</div>
+            <div id="revenueBreakdown"><div class="loading">Loading...</div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: New Leads -->
+      <div class="tab-panel" id="tab-leads">
+        <p class="section-title">New leads</p>
+        <div class="leads-toolbar">
+          <input type="text" class="filter-search" id="filterSearch" placeholder="Search name, email, business..."/>
+          <select class="filter-select" id="filterRevenue">
+            <option value="">All revenue</option>
+            <option value="no-revenue">No revenue yet</option>
+            <option value="under-10k">Under £10k</option>
+            <option value="10k-50k">£10k – £50k</option>
+            <option value="50k-200k">£50k – £200k</option>
+            <option value="200k-plus">£200k+</option>
+          </select>
+          <span class="filter-count" id="filterCount"></span>
+        </div>
+        <div class="leads-table-wrap">
+          <div id="leadsContainer"><div class="loading">Loading leads...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Qualified -->
+      <div class="tab-panel" id="tab-qualified">
+        <p class="section-title">Qualified leads</p>
+        <div class="leads-toolbar">
+          <input type="text" class="filter-search" id="filterSearchQ" placeholder="Search name, email, business..."/>
+          <span class="filter-count" id="filterCountQ"></span>
+        </div>
+        <div class="leads-table-wrap">
+          <div id="qualifiedContainer"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 4: Archived -->
+      <div class="tab-panel" id="tab-archived">
+        <p class="section-title">Archived leads</p>
+        <div class="leads-toolbar">
+          <input type="text" class="filter-search" id="filterSearchA" placeholder="Search name, email, business..."/>
+          <span class="filter-count" id="filterCountA"></span>
+        </div>
+        <div class="leads-table-wrap">
+          <div id="archivedContainer"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 5: Partial -->
+      <div class="tab-panel" id="tab-partial">
+        <p class="section-title">Partial submissions</p>
+        <p style="font-size:13px;color:var(--text-muted);margin:-8px 0 20px;">People who started the form and gave their email but didn't finish. Worth a follow-up.</p>
+        <div class="leads-toolbar">
+          <input type="text" class="filter-search" id="filterSearchP" placeholder="Search name, email, business..."/>
+          <span class="filter-count" id="filterCountP"></span>
+        </div>
+        <div class="leads-table-wrap">
+          <div id="partialContainer"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 6: Ads -->
+      <div class="tab-panel" id="tab-ads">
+        <p class="section-title">Ad spend tracker</p>
+
+        <div class="ads-stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Total spend</div>
+            <div class="stat-value accent" id="adsStatSpend">—</div>
+            <div class="stat-sub">across all campaigns</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total clicks</div>
+            <div class="stat-value" id="adsStatClicks">—</div>
+            <div class="stat-sub">from ads</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Leads from ads</div>
+            <div class="stat-value green" id="adsStatLeads">—</div>
+            <div class="stat-sub">attributed to spend</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg cost per lead</div>
+            <div class="stat-value" id="adsStatCPL">—</div>
+            <div class="stat-sub">spend ÷ leads</div>
+          </div>
+        </div>
+
+        <div class="ads-add-card">
+          <div class="ads-add-title">Log an ad entry</div>
+          <div class="ads-form-row">
+            <div class="ads-field">
+              <label>Platform</label>
+              <select class="ads-select" id="adsPlatform">
+                <option value="google">Google</option>
+                <option value="meta">Meta</option>
+                <option value="tiktok">TikTok</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="ads-field">
+              <label>Period</label>
+              <input type="text" class="ads-input wide" id="adsPeriod" placeholder="e.g. Apr 2026"/>
+            </div>
+            <div class="ads-field">
+              <label>Spend (£)</label>
+              <input type="number" class="ads-input" id="adsSpend" placeholder="0" min="0" step="0.01"/>
+            </div>
+            <div class="ads-field">
+              <label>Clicks</label>
+              <input type="number" class="ads-input" id="adsClicks" placeholder="0" min="0"/>
+            </div>
+            <div class="ads-field">
+              <label>Impressions</label>
+              <input type="number" class="ads-input" id="adsImpressions" placeholder="0" min="0"/>
+            </div>
+            <div class="ads-field">
+              <label>Leads</label>
+              <input type="number" class="ads-input" id="adsLeads" placeholder="0" min="0"/>
+            </div>
+            <button class="ads-save-btn" id="adsSaveBtn">Add entry</button>
+          </div>
+        </div>
+
+        <div class="ads-table-wrap">
+          <div id="adsContainer"><div class="loading">No entries yet.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Firebase compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="3. Scripts/firebase.js"></script>
+  <script src="3. Scripts/admin.js"></script>
+
+</body>
+</html>

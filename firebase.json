@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "CLAUDE.md",
+      "6. Docs/**",
+      "7. Reference files/**",
+      "8. Bible/**"
+    ]
+  }
+}
