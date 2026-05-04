@@ -219,6 +219,13 @@ em { font-style: italic; color: var(--accent); font-weight: inherit; }
   margin-top: 32px;
 }
 
+.offer-cta {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.offer-cta-btn { opacity: 0; }
+
 .offer-highlight {
   background: var(--accent-dim);
   border: 1px solid rgba(79, 133, 246, 0.2);

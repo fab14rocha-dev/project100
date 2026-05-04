@@ -29,9 +29,9 @@ function animateSections() {
     scrollTrigger: { trigger: '.offer-cards', start: 'top 85%' }
   });
 
-  gsap.fromTo('.offer-note', { opacity: 0, y: 16 }, {
-    opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
-    scrollTrigger: { trigger: '.offer-note', start: 'top 90%' }
+  gsap.fromTo('.offer-cta-btn', { opacity: 0, y: 16 }, {
+    opacity: 1, y: 0, duration: 0.5, ease: 'power2.out',
+    scrollTrigger: { trigger: '.offer-cta', start: 'top 90%' }
   });
 
   gsap.fromTo('.final-sub', { opacity: 0, y: 20 }, {
