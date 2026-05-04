@@ -594,6 +594,10 @@ em { font-style: italic; color: var(--accent); font-weight: inherit; }
 @media (max-width: 768px) {
   .nav            { padding: 18px 24px; }
   .container      { padding: 0 24px; }
+  .hero           { padding: 100px 24px 60px; }
+  .hero-headline  { font-size: 30px; }
+  .hero-sub       { white-space: normal; }
+  .hero-asterisk  { color: var(--text-muted); opacity: 0.85; padding: 0 8px; }
   .offer          { padding: 80px 0; }
   .offer-cards    { grid-template-columns: 1fr; }
   .why            { padding: 80px 0; }
@@ -602,8 +606,8 @@ em { font-style: italic; color: var(--accent); font-weight: inherit; }
   .testimonials        { padding: 80px 0; }
   .testimonial-card    { padding: 32px 24px; }
   .testimonial-quote   { font-size: 16px; }
-  .form-overlay   { padding: 0; align-items: flex-end; }
-  .form-modal     { max-width: 100%; border-radius: 20px 20px 0 0; max-height: 95vh; }
+  .form-overlay   { padding: 16px; align-items: center; }
+  .form-modal     { max-width: 100%; border-radius: 20px; max-height: 92vh; }
   .overlay-body   { padding: 32px 24px 48px; }
   .form-progress  { margin: 0 16px; }
   .overlay-header { padding: 16px 20px; }
