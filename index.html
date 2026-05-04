@@ -180,8 +180,8 @@
 
         <!-- Step 4: Biggest time drain -->
         <div class="form-step" data-step="4">
-          <p class="form-question">What's the one task eating most of your time right now?</p>
-          <p class="form-hint">Be specific — this helps me find the right AI opportunity for you.</p>
+          <p class="form-question">What's the one problem you'd most like to fix right now?</p>
+          <p class="form-hint">Try to be specific, it helps me start thinking about the right solution for you.</p>
           <textarea class="form-textarea" id="timeDrain" placeholder="Tell me..."></textarea>
           <button class="form-next-btn" id="step4NextBtn">Continue</button>
         </div>
@@ -201,17 +201,15 @@
         <!-- Step 6: Phone -->
         <div class="form-step" data-step="6">
           <p class="form-question">Last one — what's your phone number?</p>
-          <p class="form-hint">WhatsApp works too. I'll use this to book your discovery call.</p>
+          <p class="form-hint">WhatsApp works too. I'll use this to get in touch with you.</p>
           <input type="tel" class="form-input" id="contactPhone" placeholder="Your phone / WhatsApp..." autocomplete="off"/>
           <button class="form-next-btn" id="submitBtn">Send it over</button>
         </div>
 
-        <!-- Step 8: Book call (shown after successful submission) -->
+        <!-- Step 8: Confirmation (shown after successful submission) -->
         <div class="form-step" data-step="8">
-          <p class="form-question">You're in. Book your free 15-min call.</p>
-          <p class="form-hint">Pick a time and we'll talk through your business and exactly how AI can help.</p>
-          <div id="calendlyWidget" style="min-width:280px;height:660px;"></div>
-          <p class="skip-note">Prefer not to book now? I'll reach out to you within 48 hours.</p>
+          <p class="form-question">You're in.</p>
+          <p class="form-hint">I'll go through your answers and get in touch with you within 48 hours. Talk soon.</p>
         </div>
 
       </div>
@@ -247,9 +245,6 @@
   <!-- Firebase compat -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-  <!-- Calendly -->
-  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
   <!-- App scripts -->
   <script src="3. Scripts/firebase.js"></script>

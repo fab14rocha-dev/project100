@@ -4,8 +4,6 @@ const TOTAL_STEPS = 6;
 
 let stepHistory    = [];
 let currentStep    = 1;
-let calendlyInited = false;
-
 let formData = {
   contactName:  '',
   contactEmail: '',
@@ -123,7 +121,6 @@ function showStep(stepId) {
   );
 
   updateProgress(stepId);
-  if (stepId === 8) initCalendly();
 }
 
 function updateBackButton() {
@@ -150,7 +147,6 @@ function trackStep(stepId) {
 function resetForm() {
   stepHistory    = [];
   currentStep    = 1;
-  calendlyInited = false;
   formData = {
     contactName: '', contactEmail: '', businessType: '', timeDrain: '',
     revenue: '', contactPhone: '', submittedAt: ''
@@ -269,21 +265,6 @@ async function submitForm() {
     btn.textContent = 'Submit application';
     btn.disabled = false;
     alert('Something went wrong. Please try again.');
-  }
-}
-
-// ─── Step 8: Calendly ──────────────────────────────────────────────
-function initCalendly() {
-  if (calendlyInited) return;
-
-  if (typeof Calendly !== 'undefined') {
-    Calendly.initInlineWidget({
-      url: 'https://calendly.com/fab14rocha/30min?hide_gdpr_banner=1&background_color=0a0a0a&text_color=f0f0f0&primary_color=4F85F6',
-      parentElement: document.getElementById('calendlyWidget')
-    });
-    calendlyInited = true;
-  } else {
-    setTimeout(initCalendly, 500);
   }
 }
 
