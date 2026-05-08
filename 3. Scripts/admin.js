@@ -89,6 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Ads entry
   document.getElementById('adsSaveBtn').addEventListener('click', handleAdsSave);
+
+  initProjectsTab();
 });
 
 // ─── Load all data ─────────────────────────────────────────────────
@@ -122,6 +124,8 @@ async function loadDashboard() {
   applyFiltersQualified();
   applyFiltersArchived();
   applyFiltersPartial();
+
+  loadProjects();
 
   document.getElementById('lastUpdated').textContent =
     'Last updated: ' + new Date().toLocaleTimeString();
@@ -732,4 +736,241 @@ async function deleteAdEntry(id) {
   }
   adEntries = adEntries.filter(e => e.id !== id);
   renderAdsTab();
+}
+
+// ─── Projects / Kanban ────────────────────────────────────────────
+
+let allProjects   = [];
+let activeProject = null;
+
+function initProjectsTab() {
+  document.getElementById('newProjBtn').addEventListener('click', openNewProjModal);
+  document.getElementById('newProjCancel').addEventListener('click', closeNewProjModal);
+  document.getElementById('newProjSave').addEventListener('click', saveNewProject);
+  document.getElementById('newProjModalBackdrop').addEventListener('click', function(e) {
+    if (e.target === this) closeNewProjModal();
+  });
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  document.getElementById('drawerBackdrop').addEventListener('click', closeDrawer);
+  document.getElementById('noteAddBtn').addEventListener('click', addNote);
+  document.querySelectorAll('.status-btn').forEach(btn => {
+    btn.addEventListener('click', () => moveProject(btn.dataset.status));
+  });
+}
+
+async function loadProjects() {
+  try {
+    const snap = await db.collection('p100-projects').orderBy('createdAt', 'desc').get();
+    allProjects = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderKanban();
+  } catch (err) {
+    console.error('Projects load failed:', err);
+  }
+}
+
+function renderKanban() {
+  const cols = { scoping: [], building: [], delivered: [] };
+  allProjects.forEach(p => {
+    if (cols[p.status]) cols[p.status].push(p);
+  });
+
+  ['scoping', 'building', 'delivered'].forEach(status => {
+    const colEl   = document.getElementById('col-' + status);
+    const countEl = document.getElementById('count-' + status);
+    countEl.textContent = cols[status].length;
+
+    if (cols[status].length === 0) {
+      colEl.innerHTML = '<div style="padding:20px 16px;font-size:12px;color:var(--text-dim);">No projects yet</div>';
+      return;
+    }
+
+    colEl.innerHTML = cols[status].map(p => renderCard(p)).join('');
+    colEl.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('click', () => openDrawer(card.dataset.id));
+    });
+  });
+}
+
+function renderCard(p) {
+  const notes   = p.notes || [];
+  const dateStr = p.createdAt
+    ? new Date(p.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '';
+  return `
+    <div class="project-card" data-id="${p.id}">
+      <div class="proj-card-top">
+        <span class="proj-num">#${p.number}</span>
+        <span class="proj-date">${dateStr}</span>
+      </div>
+      <div class="proj-client">${escHtml(p.clientName)}</div>
+      ${p.industry ? `<span class="proj-industry">${escHtml(p.industry)}</span>` : ''}
+      <div class="proj-problem">${escHtml(p.problem || '')}</div>
+      ${notes.length > 0 ? `<div class="proj-notes-count">${notes.length} note${notes.length !== 1 ? 's' : ''}</div>` : ''}
+    </div>`;
+}
+
+function openDrawer(id) {
+  const p = allProjects.find(x => x.id === id);
+  if (!p) return;
+  activeProject = p;
+
+  document.getElementById('drawerTitle').textContent    = `#${p.number} — ${p.clientName}`;
+  document.getElementById('drawerSubtitle').textContent = p.industry || '';
+  document.getElementById('drawerProblem').textContent  = p.problem || '—';
+
+  const solSection = document.getElementById('drawerSolutionSection');
+  if (p.solution) {
+    document.getElementById('drawerSolution').textContent = p.solution;
+    solSection.style.display = '';
+  } else {
+    solSection.style.display = 'none';
+  }
+
+  document.querySelectorAll('.status-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.status === p.status);
+  });
+
+  renderNotes(p.notes || []);
+  document.getElementById('noteInput').value = '';
+
+  document.getElementById('projDrawer').classList.add('open');
+  document.getElementById('drawerBackdrop').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('projDrawer').classList.remove('open');
+  document.getElementById('drawerBackdrop').classList.remove('open');
+  activeProject = null;
+}
+
+function renderNotes(notes) {
+  const list = document.getElementById('notesList');
+  if (!notes.length) {
+    list.innerHTML = '<p style="font-size:13px;color:var(--text-dim);margin-bottom:0;">No notes yet.</p>';
+    return;
+  }
+  const sorted = [...notes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  list.innerHTML = sorted.map(n => `
+    <div class="note-item">
+      <div class="note-text">${escHtml(n.text)}</div>
+      <div class="note-time">${fmtDateTime(n.createdAt)}</div>
+    </div>`).join('');
+}
+
+async function addNote() {
+  if (!activeProject) return;
+  const text = document.getElementById('noteInput').value.trim();
+  if (!text) return;
+
+  const btn = document.getElementById('noteAddBtn');
+  btn.disabled    = true;
+  btn.textContent = 'Saving...';
+
+  const note = { text, createdAt: new Date().toISOString() };
+
+  try {
+    await db.collection('p100-projects').doc(activeProject.id).update({
+      notes: firebase.firestore.FieldValue.arrayUnion(note)
+    });
+
+    activeProject.notes = [...(activeProject.notes || []), note];
+    const idx = allProjects.findIndex(x => x.id === activeProject.id);
+    if (idx > -1) allProjects[idx].notes = activeProject.notes;
+
+    renderNotes(activeProject.notes);
+    renderKanban();
+    document.getElementById('noteInput').value = '';
+  } catch (err) {
+    console.error('Add note failed:', err);
+    alert('Could not save note. Try again.');
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Add note';
+  }
+}
+
+async function moveProject(newStatus) {
+  if (!activeProject || activeProject.status === newStatus) return;
+
+  try {
+    await db.collection('p100-projects').doc(activeProject.id).update({ status: newStatus });
+    activeProject.status = newStatus;
+    const idx = allProjects.findIndex(x => x.id === activeProject.id);
+    if (idx > -1) allProjects[idx].status = newStatus;
+
+    document.querySelectorAll('.status-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.status === newStatus);
+    });
+
+    renderKanban();
+  } catch (err) {
+    console.error('Move project failed:', err);
+    alert('Could not update status. Try again.');
+  }
+}
+
+function openNewProjModal() {
+  document.getElementById('newProjNumber').value   = '';
+  document.getElementById('newProjClient').value   = '';
+  document.getElementById('newProjIndustry').value = '';
+  document.getElementById('newProjProblem').value  = '';
+  document.getElementById('newProjSolution').value = '';
+  document.getElementById('newProjStatus').value   = 'scoping';
+  document.getElementById('newProjModalBackdrop').classList.add('open');
+  setTimeout(() => document.getElementById('newProjNumber').focus(), 50);
+}
+
+function closeNewProjModal() {
+  document.getElementById('newProjModalBackdrop').classList.remove('open');
+}
+
+async function saveNewProject() {
+  const number   = parseInt(document.getElementById('newProjNumber').value);
+  const client   = document.getElementById('newProjClient').value.trim();
+  const industry = document.getElementById('newProjIndustry').value.trim();
+  const problem  = document.getElementById('newProjProblem').value.trim();
+  const solution = document.getElementById('newProjSolution').value.trim();
+  const status   = document.getElementById('newProjStatus').value;
+
+  if (!number || !client || !problem) {
+    alert('Project number, client name, and problem are all required.');
+    return;
+  }
+
+  const btn = document.getElementById('newProjSave');
+  btn.disabled    = true;
+  btn.textContent = 'Saving...';
+
+  const now  = new Date().toISOString();
+  const data = { number, clientName: client, industry, problem, status, createdAt: now, notes: [] };
+  if (solution) data.solution = solution;
+
+  try {
+    const docRef = await db.collection('p100-projects').add(data);
+    allProjects.unshift({ id: docRef.id, ...data });
+    renderKanban();
+    closeNewProjModal();
+  } catch (err) {
+    console.error('Save project failed:', err);
+    alert('Could not save project. Try again.');
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Save project';
+  }
+}
+
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function fmtDateTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    + ' at '
+    + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 }
