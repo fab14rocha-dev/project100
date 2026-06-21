@@ -9,7 +9,6 @@ const stepLabels = {
   4: 'Step 4 — Time drain',
   5: 'Step 5 — Revenue',
   6: 'Step 6 — Phone',
-  8: 'Step 8 — Book call'
 };
 
 const revenueLabels = {
@@ -178,10 +177,10 @@ function renderFunnel(sessions) {
   }
 
   const reached = {};
-  for (let i = 1; i <= 8; i++) reached[i] = 0;
+  for (let i = 1; i <= 6; i++) reached[i] = 0;
 
   sessions.forEach(s => {
-    const last = s.completed ? 8 : (s.lastStep || 1);
+    const last = s.completed ? 6 : Math.min(s.lastStep || 1, 6);
     for (let i = 1; i <= last; i++) reached[i]++;
   });
 
@@ -194,7 +193,7 @@ function renderFunnel(sessions) {
       <span>From prev</span>
     </div>`;
 
-  const funnelSteps = [1, 2, 3, 4, 5, 6, 8];
+  const funnelSteps = [1, 2, 3, 4, 5, 6];
 
   funnelSteps.forEach((i, idx) => {
     const count    = reached[i];
@@ -203,7 +202,7 @@ function renderFunnel(sessions) {
     const prev     = prevStep === null ? total : reached[prevStep];
     const fromPrev = prev > 0 ? Math.round((count / prev) * 100) : 100;
     const dropPct  = 100 - fromPrev;
-    const rowClass = i === 8 ? 'completed' : (dropPct > 40 ? 'drop' : '');
+    const rowClass = i === 6 ? 'completed' : (dropPct > 40 ? 'drop' : '');
 
     const fromPrevColor = idx === 0 ? 'var(--text-muted)'
       : fromPrev >= 80 ? 'var(--green)'
@@ -441,7 +440,7 @@ function loadDemoData() {
 
   const demoSessions = [
     ...Array(50).fill(null).map((_, i) => {
-      const stepDist = [50, 42, 35, 28, 22, 18, 15, 12];
+      const stepDist = [50, 42, 35, 28, 22, 18];
       let lastStep = 1;
       for (let s = stepDist.length - 1; s >= 0; s--) {
         if (i < stepDist[s]) { lastStep = s + 1; break; }
