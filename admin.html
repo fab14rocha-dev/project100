@@ -1107,10 +1107,11 @@
   <div class="login-overlay" id="loginOverlay">
     <div class="login-card">
       <h2>Admin</h2>
-      <p>Enter your password to continue</p>
-      <input type="password" class="login-input" id="passwordInput" placeholder="Password..." autocomplete="off"/>
-      <button class="login-btn" id="loginBtn">Enter</button>
-      <p class="login-error" id="loginError">Wrong password. Try again.</p>
+      <p>Sign in to continue</p>
+      <input type="email" class="login-input" id="emailInput" placeholder="Email..." autocomplete="email"/>
+      <input type="password" class="login-input" id="passwordInput" placeholder="Password..." autocomplete="current-password"/>
+      <button class="login-btn" id="loginBtn">Sign in</button>
+      <p class="login-error" id="loginError">Wrong email or password.</p>
     </div>
   </div>
 
@@ -1127,6 +1128,7 @@
         <button class="refresh-btn" id="demoBtn">Load demo data</button>
         <button class="refresh-btn" id="refreshBtn">↺ Live data</button>
         <button class="refresh-btn" id="clearBtn" style="color:#F87171;border-color:rgba(248,113,113,0.25);">Clear all data</button>
+        <button class="refresh-btn" id="signOutBtn" style="color:#888;border-color:rgba(136,136,136,0.25);">Sign out</button>
       </div>
     </div>
 
@@ -1433,6 +1435,7 @@
 
   <!-- Firebase compat -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="3. Scripts/firebase.js"></script>
   <script src="3. Scripts/admin.js"></script>

@@ -1,7 +1,5 @@
 // admin.js — Admin dashboard logic
 
-const ADMIN_PASSWORD = 'fab-admin-2026';
-
 const stepLabels = {
   1: 'Step 1 — Name',
   2: 'Step 2 — Email',
@@ -34,24 +32,43 @@ let isDemo          = false;
 
 // ─── Login ────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('passwordInput');
-  const btn   = document.getElementById('loginBtn');
-  const error = document.getElementById('loginError');
+  const emailInput = document.getElementById('emailInput');
+  const passInput  = document.getElementById('passwordInput');
+  const btn        = document.getElementById('loginBtn');
+  const error      = document.getElementById('loginError');
 
   btn.addEventListener('click', tryLogin);
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+  passInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
 
   function tryLogin() {
-    if (input.value === ADMIN_PASSWORD) {
+    const email = emailInput.value.trim();
+    const pass  = passInput.value;
+    btn.textContent = 'Signing in...';
+    btn.disabled = true;
+    firebase.auth().signInWithEmailAndPassword(email, pass)
+      .catch(() => {
+        error.style.display = 'block';
+        passInput.value = '';
+        passInput.focus();
+        btn.textContent = 'Sign in';
+        btn.disabled = false;
+      });
+  }
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
       document.getElementById('loginOverlay').style.display = 'none';
       document.getElementById('adminPanel').classList.add('visible');
       loadDashboard();
     } else {
-      error.style.display = 'block';
-      input.value = '';
-      input.focus();
+      document.getElementById('loginOverlay').style.display = 'flex';
+      document.getElementById('adminPanel').classList.remove('visible');
     }
-  }
+  });
+
+  document.getElementById('signOutBtn').addEventListener('click', () => {
+    firebase.auth().signOut();
+  });
 
   document.getElementById('refreshBtn').addEventListener('click', () => {
     isDemo = false;
