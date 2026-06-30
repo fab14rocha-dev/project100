@@ -418,9 +418,7 @@
 
     .leads-table col.col-date     { width: 100px; }
     .leads-table col.col-contact  { width: 17%; }
-    .leads-table col.col-business { width: 13%; }
-    .leads-table col.col-drain    { width: 26%; }
-    .leads-table col.col-revenue  { width: 100px; }
+    .leads-table col.col-problem  { width: 35%; }
     .leads-table col.col-phone    { width: 130px; }
     .leads-table col.col-booked   { width: 110px; }
     .leads-table col.col-actions  { width: 130px; }
@@ -1176,12 +1174,6 @@
           <div class="loading">Loading funnel data...</div>
         </div>
 
-        <div class="breakdown-row">
-          <div class="breakdown-card">
-            <div class="breakdown-title">Revenue breakdown</div>
-            <div id="revenueBreakdown"><div class="loading">Loading...</div></div>
-          </div>
-        </div>
 
       </div>
 
@@ -1189,15 +1181,7 @@
       <div class="tab-panel" id="tab-leads">
         <p class="section-title">New leads</p>
         <div class="leads-toolbar">
-          <input type="text" class="filter-search" id="filterSearch" placeholder="Search name, email, business..."/>
-          <select class="filter-select" id="filterRevenue">
-            <option value="">All revenue</option>
-            <option value="no-revenue">No revenue yet</option>
-            <option value="under-10k">Under £10k</option>
-            <option value="10k-50k">£10k – £50k</option>
-            <option value="50k-200k">£50k – £200k</option>
-            <option value="200k-plus">£200k+</option>
-          </select>
+          <input type="text" class="filter-search" id="filterSearch" placeholder="Search name, email, problem..."/>
           <span class="filter-count" id="filterCount"></span>
         </div>
         <div class="leads-table-wrap">

@@ -3,18 +3,8 @@
 const stepLabels = {
   1: 'Step 1 — Name',
   2: 'Step 2 — Email',
-  3: 'Step 3 — Business type',
-  4: 'Step 4 — Time drain',
-  5: 'Step 5 — Revenue',
-  6: 'Step 6 — Phone',
-};
-
-const revenueLabels = {
-  'no-revenue': 'No revenue yet',
-  'under-10k':  'Under £10k',
-  '10k-50k':    '£10k – £50k',
-  '50k-200k':   '£50k – £200k',
-  '200k-plus':  '£200k+'
+  3: 'Step 3 — Problem',
+  4: 'Step 4 — Phone',
 };
 
 const crmStatusLabels = {
@@ -92,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Filters — new leads
   document.getElementById('filterSearch').addEventListener('input', applyFiltersNew);
-  document.getElementById('filterRevenue').addEventListener('change', applyFiltersNew);
 
   // Filters — qualified
   document.getElementById('filterSearchQ').addEventListener('input', applyFiltersQualified);
@@ -134,7 +123,6 @@ async function loadDashboard() {
   updateBadges();
   renderStats(sessionDocs.map(d => d), leadDocs);
   renderFunnel(sessionDocs.map(d => d));
-  renderRevenueBreakdown(leadDocs);
   renderAdsTab();
   applyFiltersNew();
   applyFiltersQualified();
@@ -194,10 +182,10 @@ function renderFunnel(sessions) {
   }
 
   const reached = {};
-  for (let i = 1; i <= 6; i++) reached[i] = 0;
+  for (let i = 1; i <= 4; i++) reached[i] = 0;
 
   sessions.forEach(s => {
-    const last = s.completed ? 6 : Math.min(s.lastStep || 1, 6);
+    const last = s.completed ? 4 : Math.min(s.lastStep || 1, 4);
     for (let i = 1; i <= last; i++) reached[i]++;
   });
 
@@ -210,7 +198,7 @@ function renderFunnel(sessions) {
       <span>From prev</span>
     </div>`;
 
-  const funnelSteps = [1, 2, 3, 4, 5, 6];
+  const funnelSteps = [1, 2, 3, 4];
 
   funnelSteps.forEach((i, idx) => {
     const count    = reached[i];
@@ -219,7 +207,7 @@ function renderFunnel(sessions) {
     const prev     = prevStep === null ? total : reached[prevStep];
     const fromPrev = prev > 0 ? Math.round((count / prev) * 100) : 100;
     const dropPct  = 100 - fromPrev;
-    const rowClass = i === 6 ? 'completed' : (dropPct > 40 ? 'drop' : '');
+    const rowClass = i === 4 ? 'completed' : (dropPct > 40 ? 'drop' : '');
 
     const fromPrevColor = idx === 0 ? 'var(--text-muted)'
       : fromPrev >= 80 ? 'var(--green)'
@@ -243,41 +231,13 @@ function renderFunnel(sessions) {
   card.innerHTML = html;
 }
 
-// ─── Revenue breakdown ────────────────────────────────────────────
-function renderRevenueBreakdown(leads) {
-  const container = document.getElementById('revenueBreakdown');
-  if (leads.length === 0) { container.innerHTML = '<div class="empty">No data yet.</div>'; return; }
-
-  const counts = {};
-  leads.forEach(l => { const v = l.revenue || 'unknown'; counts[v] = (counts[v] || 0) + 1; });
-
-  const max = Math.max(...Object.values(counts));
-  let html  = '';
-
-  Object.entries(revenueLabels).forEach(([key, label]) => {
-    const count = counts[key] || 0;
-    const pct   = max > 0 ? Math.round((count / max) * 100) : 0;
-    html += `
-      <div class="breakdown-item">
-        <div class="breakdown-item-label">${label}</div>
-        <div class="breakdown-bar-track"><div class="breakdown-bar-fill" style="width:${pct}%"></div></div>
-        <div class="breakdown-item-count">${count}</div>
-      </div>`;
-  });
-
-  container.innerHTML = html;
-}
-
 // ─── New leads tab ────────────────────────────────────────────────
 function applyFiltersNew() {
-  const search  = document.getElementById('filterSearch').value.toLowerCase().trim();
-  const revenue = document.getElementById('filterRevenue').value;
+  const search = document.getElementById('filterSearch').value.toLowerCase().trim();
 
-  const filtered = newLeads.filter(l => {
-    const matchSearch  = !search || [l.contactName, l.contactEmail, l.businessType].some(v => (v || '').toLowerCase().includes(search));
-    const matchRevenue = !revenue || l.revenue === revenue;
-    return matchSearch && matchRevenue;
-  });
+  const filtered = newLeads.filter(l =>
+    !search || [l.contactName, l.contactEmail, l.problem].some(v => (v || '').toLowerCase().includes(search))
+  );
 
   document.getElementById('filterCount').textContent = filtered.length + ' of ' + newLeads.length;
   renderLeadsTable(filtered, 'leadsContainer', 'new');
@@ -288,7 +248,7 @@ function applyFiltersQualified() {
   const search = document.getElementById('filterSearchQ').value.toLowerCase().trim();
 
   const filtered = qualifiedLeads.filter(l =>
-    !search || [l.contactName, l.contactEmail, l.businessType].some(v => (v || '').toLowerCase().includes(search))
+    !search || [l.contactName, l.contactEmail, l.problem].some(v => (v || '').toLowerCase().includes(search))
   );
 
   document.getElementById('filterCountQ').textContent = filtered.length + ' of ' + qualifiedLeads.length;
@@ -300,7 +260,7 @@ function applyFiltersArchived() {
   const search = document.getElementById('filterSearchA').value.toLowerCase().trim();
 
   const filtered = archivedLeads.filter(l =>
-    !search || [l.contactName, l.contactEmail, l.businessType].some(v => (v || '').toLowerCase().includes(search))
+    !search || [l.contactName, l.contactEmail, l.problem].some(v => (v || '').toLowerCase().includes(search))
   );
 
   document.getElementById('filterCountA').textContent = filtered.length + ' of ' + archivedLeads.length;
@@ -324,12 +284,10 @@ function renderLeadsTable(leads, containerId, mode) {
   }
 
   const rows = leads.map((l, i) => {
-    const uid   = containerId + '-' + i;
-    const date  = l.submittedAt ? new Date(l.submittedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
-    const rev   = revenueLabels[l.revenue] || l.revenue || '—';
-    const badge = revenueBadge(l.revenue);
-    const drain = l.timeDrain || '—';
-    const isLong = drain.length > 80;
+    const uid     = containerId + '-' + i;
+    const date    = l.submittedAt ? new Date(l.submittedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+    const problem = l.problem || '—';
+    const isLong  = problem.length > 80;
 
     let actionCell = '';
 
@@ -377,12 +335,10 @@ function renderLeadsTable(leads, containerId, mode) {
           <div class="cell-name">${l.contactName || '—'}</div>
           <div class="cell-muted">${l.contactEmail || ''}</div>
         </td>
-        <td>${l.businessType || '—'}</td>
         <td class="cell-clamp">
-          <div class="clamp-text" id="drain-${uid}">${drain}</div>
-          ${isLong ? `<button class="expand-btn" onclick="toggleExpand('drain-${uid}', this)">Read more</button>` : ''}
+          <div class="clamp-text" id="prob-${uid}">${problem}</div>
+          ${isLong ? `<button class="expand-btn" onclick="toggleExpand('prob-${uid}', this)">Read more</button>` : ''}
         </td>
-        <td><span class="badge ${badge}">${rev}</span></td>
         <td>${l.contactPhone || '—'}</td>
         <td>${bookedCell}</td>
         <td>${actionCell}</td>
@@ -391,15 +347,12 @@ function renderLeadsTable(leads, containerId, mode) {
 
   const extraTh = mode === 'new' ? '<th>Actions</th>' : mode === 'qualified' ? '<th>Status</th>' : '<th></th>';
 
-
   container.innerHTML = `
     <table class="leads-table">
       <colgroup>
         <col class="col-date"/>
         <col class="col-contact"/>
-        <col class="col-business"/>
-        <col class="col-drain"/>
-        <col class="col-revenue"/>
+        <col class="col-problem"/>
         <col class="col-phone"/>
         <col class="col-booked"/>
         <col class="col-actions"/>
@@ -408,9 +361,7 @@ function renderLeadsTable(leads, containerId, mode) {
         <tr>
           <th>Date</th>
           <th>Contact</th>
-          <th>Business</th>
-          <th>Biggest time drain</th>
-          <th>Revenue</th>
+          <th>Problem</th>
           <th>Phone</th>
           <th>Call booked</th>
           ${extraTh}
@@ -467,18 +418,18 @@ function loadDemoData() {
   ];
 
   const demoLeads = [
-    { id: 'd1', contactName: 'James Mitchell',  contactEmail: 'james@mitchellplumbing.co.uk', businessType: 'Plumbing & Heating',   timeDrain: "Chasing invoices and following up with clients who haven't paid. I spend hours every week on this and it never seems to get better.", revenue: '50k-200k',  contactPhone: '+44 7911 123456', submittedAt: '2026-04-18T09:23:00Z', status: 'new',       bookedCall: true },
-    { id: 'd2', contactName: 'Sarah Chen',       contactEmail: 'sarah@chendesign.co.uk',       businessType: 'Graphic Design',       timeDrain: "Writing client proposals. Each one takes me 2–3 hours and half of them don't convert.",                                         revenue: '10k-50k',   contactPhone: '+44 7922 234567', submittedAt: '2026-04-17T14:05:00Z', status: 'qualified', crmStatus: 'contacted', bookedCall: true },
-    { id: 'd3', contactName: 'Marcus Williams',  contactEmail: 'marcus@mwfitness.com',         businessType: 'Personal Training',    timeDrain: "Scheduling sessions and sending reminders manually. My clients forget and I'm constantly texting to confirm.",                   revenue: '10k-50k',   contactPhone: '+44 7933 345678', submittedAt: '2026-04-16T11:30:00Z', status: 'new',       bookedCall: false },
-    { id: 'd4', contactName: 'Priya Patel',      contactEmail: 'priya@curryhouse.co.uk',       businessType: 'Restaurant',           timeDrain: "Replying to the same questions on WhatsApp and Instagram about our menu and opening hours. It's all day, every day.",          revenue: '50k-200k',  contactPhone: '+44 7944 456789', submittedAt: '2026-04-15T18:20:00Z', status: 'qualified', crmStatus: 'in-progress', bookedCall: true },
-    { id: 'd5', contactName: 'Tom Brady',        contactEmail: 'tom@bradylegal.co.uk',         businessType: 'Law Firm',             timeDrain: "Summarising documents and drafting initial client letters. Takes ages and I have to do it from scratch every single time.",     revenue: '200k-plus', contactPhone: '+44 7955 567890', submittedAt: '2026-04-14T10:15:00Z', status: 'qualified', crmStatus: 'to-contact', bookedCall: false },
-    { id: 'd6', contactName: 'Emma Thompson',    contactEmail: 'emma@etcreative.co.uk',        businessType: 'Marketing Agency',     timeDrain: "Writing social media captions and blog posts for 8 clients. We produce content daily and it takes up most of our team's time.", revenue: '50k-200k',  contactPhone: '+44 7966 678901', submittedAt: '2026-04-13T15:45:00Z', status: 'new',       bookedCall: false },
-    { id: 'd7', contactName: 'David Kim',        contactEmail: 'david@kimaccounting.co.uk',    businessType: 'Accounting',           timeDrain: "Explaining the same tax concepts to new clients over and over again in meetings.",                                              revenue: '50k-200k',  contactPhone: '+44 7977 789012', submittedAt: '2026-04-12T09:00:00Z', status: 'archived',  bookedCall: false },
-    { id: 'd8', contactName: 'Lisa Johnson',     contactEmail: 'lisa@ljvirtual.co.uk',         businessType: 'Virtual Assistant',    timeDrain: "Email management for clients. Sorting, responding to routine emails, scheduling. It's hours every day.",                       revenue: 'under-10k', contactPhone: '+44 7988 890123', submittedAt: '2026-04-11T13:30:00Z', status: 'new',       bookedCall: false },
-    { id: 'd9', contactName: "Ryan O'Brien",     contactEmail: 'ryan@obrienconst.ie',          businessType: 'Construction',         timeDrain: "Creating quotes and estimates for every job. Each one is different and takes a long time to put together accurately.",          revenue: '200k-plus', contactPhone: '+44 7999 901234', submittedAt: '2026-04-10T11:00:00Z', status: 'new',       bookedCall: true },
-    { id: 'd10', contactName: 'Amara Okafor',   contactEmail: 'amara@beautybyamara.co.uk',    businessType: 'Beauty Salon',         timeDrain: "Booking appointments through Instagram DMs. People message at midnight and I miss them by morning.",                            revenue: '10k-50k',   contactPhone: '+44 7900 012345', submittedAt: '2026-04-09T16:00:00Z', status: 'qualified', crmStatus: 'to-contact', bookedCall: true },
-    { id: 'd11', contactName: 'Chris Foster',   contactEmail: 'chris@fosterphoto.co.uk',      businessType: 'Photography',          timeDrain: "Culling and editing hundreds of photos after every shoot. I spend more time editing than I do shooting.",                        revenue: '10k-50k',   contactPhone: '+44 7911 111222', submittedAt: '2026-04-08T10:30:00Z', status: 'new',       bookedCall: false },
-    { id: 'd12', contactName: 'Sophie Walsh',   contactEmail: 'sophie@walshrealestate.co.uk', businessType: 'Estate Agent',         timeDrain: "Writing property descriptions for listings. I have 20+ properties at any time and they all need unique, compelling copy.",      revenue: '50k-200k',  contactPhone: '+44 7922 222333', submittedAt: '2026-04-07T14:00:00Z', status: 'new',       bookedCall: false },
+    { id: 'd1',  contactName: 'James Mitchell',  contactEmail: 'james@mitchellplumbing.co.uk', problem: "I spend hours every week chasing invoices and following up with clients who haven't paid. It never seems to get better.",                           contactPhone: '+44 7911 123456', submittedAt: '2026-04-18T09:23:00Z', status: 'new',       bookedCall: true },
+    { id: 'd2',  contactName: 'Sarah Chen',       contactEmail: 'sarah@chendesign.co.uk',       problem: "Writing client proposals. Each one takes me 2–3 hours and half of them don't convert. I need a faster way to produce them.",                               contactPhone: '+44 7922 234567', submittedAt: '2026-04-17T14:05:00Z', status: 'qualified', crmStatus: 'contacted', bookedCall: true },
+    { id: 'd3',  contactName: 'Marcus Williams',  contactEmail: 'marcus@mwfitness.com',         problem: "I schedule sessions and send reminders manually. My clients forget and I'm constantly texting to confirm. Needs to be automated.",                          contactPhone: '+44 7933 345678', submittedAt: '2026-04-16T11:30:00Z', status: 'new',       bookedCall: false },
+    { id: 'd4',  contactName: 'Priya Patel',      contactEmail: 'priya@curryhouse.co.uk',       problem: "Replying to the same questions on WhatsApp and Instagram about our menu and opening hours. It's all day, every day and I can't keep up.",                   contactPhone: '+44 7944 456789', submittedAt: '2026-04-15T18:20:00Z', status: 'qualified', crmStatus: 'in-progress', bookedCall: true },
+    { id: 'd5',  contactName: 'Tom Brady',        contactEmail: 'tom@bradylegal.co.uk',         problem: "Summarising documents and drafting initial client letters from scratch every single time. It takes too long and I need a smarter system.",                   contactPhone: '+44 7955 567890', submittedAt: '2026-04-14T10:15:00Z', status: 'qualified', crmStatus: 'to-contact', bookedCall: false },
+    { id: 'd6',  contactName: 'Emma Thompson',    contactEmail: 'emma@etcreative.co.uk',        problem: "Writing social media captions and blog posts for 8 clients every day. It takes up most of our team's time and blocks us from doing more strategic work.",    contactPhone: '+44 7966 678901', submittedAt: '2026-04-13T15:45:00Z', status: 'new',       bookedCall: false },
+    { id: 'd7',  contactName: 'David Kim',        contactEmail: 'david@kimaccounting.co.uk',    problem: "I explain the same tax concepts to new clients over and over again in meetings. I want a way to handle this without my time.",                               contactPhone: '+44 7977 789012', submittedAt: '2026-04-12T09:00:00Z', status: 'archived',  bookedCall: false },
+    { id: 'd8',  contactName: 'Lisa Johnson',     contactEmail: 'lisa@ljvirtual.co.uk',         problem: "Email management for clients — sorting, responding to routine emails, scheduling. It's hours every day and I can't scale without fixing this.",              contactPhone: '+44 7988 890123', submittedAt: '2026-04-11T13:30:00Z', status: 'new',       bookedCall: false },
+    { id: 'd9',  contactName: "Ryan O'Brien",     contactEmail: 'ryan@obrienconst.ie',          problem: "Creating quotes and estimates for every job from scratch. Each one is different and takes a long time. I lose work because I'm too slow to respond.",        contactPhone: '+44 7999 901234', submittedAt: '2026-04-10T11:00:00Z', status: 'new',       bookedCall: true },
+    { id: 'd10', contactName: 'Amara Okafor',     contactEmail: 'amara@beautybyamara.co.uk',    problem: "Booking appointments through Instagram DMs. People message at midnight and by morning I've missed them or they've booked somewhere else.",                   contactPhone: '+44 7900 012345', submittedAt: '2026-04-09T16:00:00Z', status: 'qualified', crmStatus: 'to-contact', bookedCall: true },
+    { id: 'd11', contactName: 'Chris Foster',     contactEmail: 'chris@fosterphoto.co.uk',      problem: "Culling and editing hundreds of photos after every shoot. I spend more time in Lightroom than I do shooting. I need a faster culling process.",              contactPhone: '+44 7911 111222', submittedAt: '2026-04-08T10:30:00Z', status: 'new',       bookedCall: false },
+    { id: 'd12', contactName: 'Sophie Walsh',     contactEmail: 'sophie@walshrealestate.co.uk', problem: "Writing property descriptions for 20+ listings at a time. They all need unique copy and it takes me or my team a full day every week.",                     contactPhone: '+44 7922 222333', submittedAt: '2026-04-07T14:00:00Z', status: 'new',       bookedCall: false },
   ];
 
   newLeads       = demoLeads.filter(l => !l.status || l.status === 'new');
@@ -506,12 +457,6 @@ function toggleExpand(id, btn) {
   const el      = document.getElementById(id);
   const expanded = el.classList.toggle('expanded');
   btn.textContent = expanded ? 'Show less' : 'Read more';
-}
-
-function revenueBadge(revenue) {
-  if (revenue === 'no-revenue' || revenue === 'under-10k') return 'badge-red';
-  if (revenue === '10k-50k') return 'badge-yellow';
-  return 'badge-green';
 }
 
 // ─── Ads tab ──────────────────────────────────────────────────────
@@ -627,7 +572,7 @@ function renderAdsTab() {
 function applyFiltersPartial() {
   const search = document.getElementById('filterSearchP').value.toLowerCase().trim();
   const filtered = partialLeads.filter(s =>
-    !search || [s.contactName, s.contactEmail, s.businessType].some(v => (v || '').toLowerCase().includes(search))
+    !search || [s.contactName, s.contactEmail, s.problem].some(v => (v || '').toLowerCase().includes(search))
   );
   document.getElementById('filterCountP').textContent = filtered.length + ' of ' + partialLeads.length;
   renderPartialTable(filtered);
@@ -648,10 +593,8 @@ function renderPartialTable(sessions) {
   const stepDropLabels = {
     1: 'Before email',
     2: 'After email',
-    3: 'After business type',
-    4: 'After time drain',
-    5: 'After revenue',
-    6: 'After phone',
+    3: 'After problem',
+    4: 'After phone',
   };
 
   const rows = sessions.map(s => {
@@ -666,7 +609,7 @@ function renderPartialTable(sessions) {
           <div class="cell-name">${s.contactName || '—'}</div>
           <div class="cell-muted">${s.contactEmail || ''}</div>
         </td>
-        <td>${s.businessType || '<span style="color:var(--text-dim)">Not given</span>'}</td>
+        <td>${s.problem ? `<span style="font-size:12px;color:var(--text-muted);">${s.problem.substring(0, 60)}${s.problem.length > 60 ? '…' : ''}</span>` : '<span style="color:var(--text-dim)">Not given</span>'}</td>
         <td><span style="font-size:12px;color:var(--text-muted);">${stoppedAt}</span></td>
         <td>
           <button onclick="togglePartialFollowedUp('${s.id}', this)" style="
