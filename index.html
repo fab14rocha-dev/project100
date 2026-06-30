@@ -62,6 +62,21 @@
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
   @keyframes popIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
   input::placeholder,textarea::placeholder{color:#6b6253}
+  @media(max-width:768px){
+    .page-header{padding:32px 20px 0!important}
+    .page-header .hdr-tag{display:none}
+    .hero-section{grid-template-columns:1fr!important;padding:24px 20px 48px!important;gap:36px!important}
+    .cell-grid{gap:4px!important}
+    .count-inner{padding:0 20px!important}
+    .how-section{padding:60px 20px!important}
+    .steps-grid{grid-template-columns:1fr!important;gap:12px!important}
+    .testi-section{padding:60px 20px 80px!important}
+    .testi-inner{height:auto!important;padding:24px 0!important}
+    .cta-inner{padding:72px 20px!important}
+    .page-footer{padding:24px 20px 40px!important}
+    [data-modal]{padding:28px 20px 24px!important}
+    .confirm-card{padding:32px 20px!important}
+  }
 </style>
 </helmet>
 
@@ -69,13 +84,13 @@
   <div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:90;opacity:0.06;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);background-size:200px 200px;"></div>
   <main data-screen-label="Monument" style="font-family:'Archivo',sans-serif;color:#f0e6d2;">
 
-    <header style="display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto;padding:64px 40px 0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#a99d88;animation:fadeIn .8s forwards;">
+    <header class="page-header" style="display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto;padding:64px 40px 0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#a99d88;animation:fadeIn .8s forwards;">
       <span style="color:#f0e6d2;font-weight:700;">PROJECT&nbsp;#100</span>
-      <span>100&nbsp;people&nbsp;·&nbsp;real&nbsp;problems&nbsp;·&nbsp;zero&nbsp;cost</span>
+      <span class="hdr-tag">100&nbsp;people&nbsp;·&nbsp;real&nbsp;problems&nbsp;·&nbsp;zero&nbsp;cost</span>
     </header>
 
-    <section style="max-width:1280px;margin:0 auto;padding:40px 40px 60px;display:grid;grid-template-columns:1.15fr 0.85fr;gap:60px;align-items:center;">
-      <div>
+    <section class="hero-section" style="max-width:1280px;margin:0 auto;padding:40px 40px 60px;display:grid;grid-template-columns:1.15fr 0.85fr;gap:60px;align-items:center;">
+      <div class="hero-content">
         <p style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;animation:fadeUp .6s forwards;">92 spots left</p>
         <h1 style="font-weight:900;font-size:clamp(38px,4.9vw,72px);line-height:0.95;letter-spacing:-0.03em;text-transform:uppercase;animation:fadeUp .7s forwards .05s;">I want to help <span data-hero-num data-to="100" data-dur="1100" style="color:var(--accent);">0</span> people.</h1>
         <p style="font-weight:900;font-size:clamp(20px,2.5vw,32px);line-height:1;text-transform:uppercase;letter-spacing:-0.02em;color:#cbbfa8;margin-top:12px;animation:fadeUp .7s forwards .1s;">One problem at a time.</p>
@@ -85,8 +100,8 @@
         </div>
       </div>
 
-      <div style="position:relative;animation:fadeIn .8s forwards .2s;">
-        <div data-grid style="display:grid;grid-template-columns:repeat(10,1fr);gap:7px;">
+      <div class="hero-grid" style="position:relative;animation:fadeIn .8s forwards .2s;">
+        <div data-grid class="cell-grid" style="display:grid;grid-template-columns:repeat(10,1fr);gap:7px;">
           <sc-for list="{{ cells }}" as="cell" hint-placeholder-count="100">
             <span data-cell data-st="{{ cell.st }}" data-msg="{{ cell.msg }}" style="position:relative;aspect-ratio:1;border-radius:3px;border:1.5px solid {{ cell.border }};background:{{ cell.bg }};animation:{{ cell.anim }};cursor:{{ cell.cursor }};transition:transform .15s,background .15s,border-color .15s;" style-hover="transform:scale(1.25);z-index:5"></span>
           </sc-for>
@@ -101,7 +116,7 @@
     </section>
 
     <section data-reveal data-count-band style="background:#221b14;border-top:1px solid rgba(240,230,210,0.1);border-bottom:1px solid rgba(240,230,210,0.1);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
-      <div style="max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(3,1fr);">
+      <div class="count-inner" style="max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(3,1fr);">
         <div style="padding:50px 0;text-align:center;border-right:1px solid rgba(240,230,210,0.1);">
           <div style="font-weight:900;font-size:clamp(56px,8vw,120px);line-height:1;color:var(--accent);letter-spacing:-0.04em;"><span data-countup data-to="7" data-pad="2">00</span></div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#a99d88;margin-top:10px;">Completed</div>
@@ -117,9 +132,9 @@
       </div>
     </section>
 
-    <section style="max-width:1280px;margin:0 auto;padding:96px 40px;">
+    <section class="how-section" style="max-width:1280px;margin:0 auto;padding:96px 40px;">
       <h2 data-reveal style="font-weight:900;font-size:clamp(32px,5vw,68px);text-transform:uppercase;letter-spacing:-0.02em;margin-bottom:48px;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">Here's how<br>it works.</h2>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+      <div class="steps-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
         <sc-for list="{{ steps }}" as="step" hint-placeholder-count="3">
           <div data-reveal style="background:#221b14;border-radius:6px;padding:36px 30px;opacity:0;transition:opacity .7s ease {{ step.delay }},transform .2s,background .2s;" style-hover="transform:translateY(-4px);background:#2a2118">
             <div style="font-weight:900;font-size:72px;line-height:0.85;color:var(--accent);letter-spacing:-0.04em;">{{ step.n }}</div>
@@ -130,9 +145,9 @@
       </div>
     </section>
 
-    <section data-reveal style="max-width:1040px;margin:0 auto;padding:80px 40px 100px;text-align:center;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
+    <section data-reveal class="testi-section" style="max-width:1040px;margin:0 auto;padding:80px 40px 100px;text-align:center;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
       <p style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:44px;">What people say</p>
-      <div style="height:320px;display:flex;flex-direction:column;justify-content:center;opacity:{{ tOpacity }};transition:opacity .45s ease;">
+      <div class="testi-inner" style="height:320px;display:flex;flex-direction:column;justify-content:center;opacity:{{ tOpacity }};transition:opacity .45s ease;">
         <blockquote style="font-weight:800;font-size:clamp(23px,2.9vw,40px);line-height:1.26;letter-spacing:-0.02em;max-width:24ch;margin:0 auto;">"{{ quote.pre }}<span style="color:var(--accent);">{{ quote.hi }}</span>{{ quote.post }}"</blockquote>
         <p style="margin-top:36px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#a99d88;"><span style="color:#f0e6d2;">{{ quote.name }}</span>&nbsp;&nbsp;·&nbsp;&nbsp;{{ quote.meta }}</p>
       </div>
@@ -144,14 +159,14 @@
     </section>
 
     <section style="background:var(--accent);color:#1a1410;">
-      <div data-reveal style="max-width:1280px;margin:0 auto;padding:110px 40px;text-align:center;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
+      <div data-reveal class="cta-inner" style="max-width:1280px;margin:0 auto;padding:110px 40px;text-align:center;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
         <h2 style="font-weight:900;font-size:clamp(40px,8vw,120px);line-height:0.92;text-transform:uppercase;letter-spacing:-0.03em;">Be one<br>of the 100.</h2>
         <p style="font-size:clamp(17px,2vw,22px);font-weight:600;margin:28px auto 40px;max-width:34ch;opacity:0.8;">Fill the quick form with a few details and I'll get back to you within 12 hours.</p>
         <a href="#" onClick="{{ openForm }}" style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;background:#1a1410;color:#f0e6d2;padding:19px 40px;border-radius:3px;text-decoration:none;font-weight:700;display:inline-block;transition:transform .2s;" style-hover="transform:translateY(-3px)">Join the 100 →</a>
       </div>
     </section>
 
-    <footer style="max-width:1280px;margin:0 auto;padding:36px 40px 60px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#8a7e6b;">
+    <footer class="page-footer" style="max-width:1280px;margin:0 auto;padding:36px 40px 60px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#8a7e6b;">
       <span>PROJECT #100</span>
       <a href="https://portfolio.project100.dev/#projects" target="_blank" rel="noopener noreferrer" style="color:#8a7e6b;text-decoration:none;transition:color .2s;" style-hover="color:#f0e6d2">SEE ALL PROJECTS ↗</a>
     </footer>
@@ -224,7 +239,7 @@
   <!-- Confirm close -->
   <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
   <div data-confirm style="position:fixed;inset:0;z-index:110;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(8,6,4,0.7);">
-    <div style="width:100%;max-width:360px;background:#1a1410;border:1px solid rgba(240,230,210,0.14);border-radius:12px;padding:40px 44px;text-align:center;animation:popIn .25s forwards;">
+    <div class="confirm-card" style="width:100%;max-width:360px;background:#1a1410;border:1px solid rgba(240,230,210,0.14);border-radius:12px;padding:40px 44px;text-align:center;animation:popIn .25s forwards;">
       <p style="font-weight:800;font-size:22px;letter-spacing:-0.01em;margin-bottom:10px;color:#f0e6d2;">Leave the form?</p>
       <p style="font-size:15px;color:#a99d88;font-weight:500;margin-bottom:32px;">Your answers will be lost.</p>
       <div style="display:flex;gap:12px;justify-content:center;">
