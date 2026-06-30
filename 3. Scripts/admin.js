@@ -322,7 +322,7 @@ function renderLeadsTable(leads, containerId, mode) {
         background:${booked ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.04)'};
         border:1px solid ${booked ? 'rgba(52,211,153,0.3)' : 'var(--border)'};
         color:${booked ? 'var(--green)' : 'var(--text-dim)'};
-        font-family:Inter,sans-serif; font-size:11px; font-weight:500;
+        font-family:'Archivo',sans-serif; font-size:11px; font-weight:500;
         padding:4px 10px; border-radius:6px; cursor:pointer; white-space:nowrap;
         transition:all 0.2s;">
         ${booked ? '✓ Booked' : '— Not booked'}
@@ -616,7 +616,7 @@ function renderPartialTable(sessions) {
             background:${followedUp ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.04)'};
             border:1px solid ${followedUp ? 'rgba(52,211,153,0.3)' : 'var(--border)'};
             color:${followedUp ? 'var(--green)' : 'var(--text-dim)'};
-            font-family:Inter,sans-serif; font-size:11px; font-weight:500;
+            font-family:'Archivo',sans-serif; font-size:11px; font-weight:500;
             padding:4px 10px; border-radius:6px; cursor:pointer; white-space:nowrap;
             transition:all 0.2s;">
             ${followedUp ? '✓ Followed up' : '— Not yet'}
