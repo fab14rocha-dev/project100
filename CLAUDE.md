@@ -35,7 +35,7 @@ Simple goal: help 100 people. 100 different problems, 100 different solutions. F
 
 ## Admin
 - URL: admin.html
-- Password: fab-admin-2026
+- Login: Firebase Authentication (email + password) — account set up in Firebase Console
 - Tabs: Summary, New Leads, Qualified, Archived, Ads, Projects
 
 ## Rules
