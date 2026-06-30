@@ -15,6 +15,8 @@
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 
+  <!-- GA consent gate — disable by default until user accepts -->
+  <script>if(!localStorage.getItem('p100_consent')){window['ga-disable-G-6D01FZTZ0R']=true;}</script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6D01FZTZ0R"></script>
   <script>
@@ -166,9 +168,12 @@
       </div>
     </section>
 
-    <footer class="page-footer" style="max-width:1280px;margin:0 auto;padding:36px 40px 60px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#8a7e6b;">
+    <footer class="page-footer" style="max-width:1280px;margin:0 auto;padding:36px 40px 60px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#8a7e6b;">
       <span>PROJECT #100</span>
-      <a href="https://portfolio.project100.dev/#projects" target="_blank" rel="noopener noreferrer" style="color:#8a7e6b;text-decoration:none;transition:color .2s;" style-hover="color:#f0e6d2">SEE ALL PROJECTS ↗</a>
+      <div style="display:flex;gap:24px;align-items:center;">
+        <a href="#" onClick="{{ openPrivacy }}" style="color:#8a7e6b;text-decoration:none;transition:color .2s;" style-hover="color:#f0e6d2">PRIVACY</a>
+        <a href="https://portfolio.project100.dev/#projects" target="_blank" rel="noopener noreferrer" style="color:#8a7e6b;text-decoration:none;transition:color .2s;" style-hover="color:#f0e6d2">SEE ALL PROJECTS ↗</a>
+      </div>
     </footer>
   </main>
 
@@ -252,11 +257,37 @@
 
   </sc-if>
 
+  <!-- COOKIE BANNER -->
+  <sc-if value="{{ cookieBanner }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;bottom:0;left:0;right:0;z-index:200;background:#1a1410;border-top:1px solid rgba(240,230,210,0.12);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#8a7e6b;">
+    <span>This site uses Google Analytics to understand traffic. No personal data is shared. <a href="#" onClick="{{ openPrivacy }}" style="color:#e08a3c;text-decoration:none;" style-hover="color:#f0e6d2">More info</a></span>
+    <button onClick="{{ acceptCookies }}" style="background:var(--accent);color:#1a1410;border:none;padding:8px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;border-radius:3px;cursor:pointer;white-space:nowrap;flex-shrink:0;" style-hover="opacity:0.88">Got it</button>
+  </div>
+  </sc-if>
+
+  <!-- PRIVACY MODAL -->
+  <sc-if value="{{ privacyOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ onPrivacyOverlay }}" style="position:fixed;inset:0;z-index:300;background:rgba(8,6,4,0.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s forwards;">
+    <div data-privacy-modal style="position:relative;width:100%;max-width:520px;background:#1a1410;color:#f0e6d2;border:1px solid rgba(240,230,210,0.14);border-radius:12px;padding:40px 40px 36px;font-family:'Archivo',sans-serif;animation:popIn .3s forwards;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#f0e6d2;font-weight:700;">PRIVACY NOTICE</span>
+        <button onClick="{{ closePrivacy }}" style="background:none;border:1px solid rgba(240,230,210,0.18);border-radius:50%;width:30px;height:30px;color:#a99d88;cursor:pointer;font-size:14px;line-height:1;" style-hover="color:#f0e6d2;border-color:rgba(240,230,210,0.4)">✕</button>
+      </div>
+      <div style="font-size:14px;line-height:1.7;color:#c4b89a;">
+        <p style="margin:0 0 18px;"><strong style="color:#f0e6d2;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">What we collect</strong><br>When you submit the form, we save your name, email, phone number, and a description of your problem. This is used only to contact you about your project request.</p>
+        <p style="margin:0 0 18px;"><strong style="color:#f0e6d2;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">Analytics</strong><br>This site uses Google Analytics to understand how people find and use the page. Analytics only runs if you accept cookies. No personal data is sent to Google.</p>
+        <p style="margin:0 0 18px;"><strong style="color:#f0e6d2;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">Your rights</strong><br>You can ask to have your data deleted at any time. Email <a href="mailto:fab14rocha@gmail.com" style="color:#e08a3c;text-decoration:none;">fab14rocha@gmail.com</a> and it will be removed within 7 days.</p>
+        <p style="margin:0;"><strong style="color:#f0e6d2;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;">Data storage</strong><br>Submissions are stored in Firebase Firestore (Google Cloud) and are not shared with third parties.</p>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#e08a3c&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
 class Component extends DCLogic {
-  state = { open: false, step: 0, data: {}, tIndex: 0, tOpacity: 1, confirmOpen: false, submitting: false, submitError: null };
+  state = { open: false, step: 0, data: {}, tIndex: 0, tOpacity: 1, confirmOpen: false, submitting: false, submitError: null, cookieBanner: !localStorage.getItem('p100_consent'), privacyOpen: false };
 
   testimonials = [
     { pre: 'In less than 24 hours you created this. You ', hi: 'exceeded my expectations.', post: '', name: 'JOSEPH LOBELLO', meta: 'PROJECT #4 — XPERIENCE INTAKE FORM' },
@@ -380,7 +411,13 @@ class Component extends DCLogic {
       continueStyle:   continueBase + 'background:var(--accent);cursor:' + (continueDisabled ? 'not-allowed' : 'pointer') + ';opacity:' + (continueDisabled ? '0.4' : '1') + ';',
       continueLabel:   isDone ? '' : (isLastStep ? (this.state.submitting ? 'Sending...' : 'Send it over') : 'Continue'),
       progressLabel:   isDone ? 'Complete' : (pad(step + 1) + ' / ' + pad(total)),
-      progressCells:   Array.from({ length: total }, (_, i) => ({ bg: i < step || isDone ? 'var(--accent)' : (i === step ? 'var(--accent)' : 'rgba(240,230,210,0.14)') }))
+      progressCells:   Array.from({ length: total }, (_, i) => ({ bg: i < step || isDone ? 'var(--accent)' : (i === step ? 'var(--accent)' : 'rgba(240,230,210,0.14)') })),
+      cookieBanner: this.state.cookieBanner,
+      privacyOpen:  this.state.privacyOpen,
+      acceptCookies: () => this._acceptCookies(),
+      openPrivacy:  (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ privacyOpen: true }); },
+      closePrivacy: () => this.setState({ privacyOpen: false }),
+      onPrivacyOverlay: (e) => { if (e && e.target && e.target.closest && !e.target.closest('[data-privacy-modal]')) this.setState({ privacyOpen: false }); }
     };
   }
 
@@ -404,6 +441,15 @@ class Component extends DCLogic {
   _openForm() {
     this._startSession();
     this.setState({ open: true, step: 0, data: {}, confirmOpen: false, submitError: null });
+  }
+
+  _acceptCookies() {
+    localStorage.setItem('p100_consent', '1');
+    window['ga-disable-G-6D01FZTZ0R'] = false;
+    if (typeof gtag !== 'undefined') {
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+    }
+    this.setState({ cookieBanner: false });
   }
 
   async _submit() {
