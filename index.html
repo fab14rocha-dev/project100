@@ -6,18 +6,16 @@
   <title>Project #100 — Free AI solutions for 100 people</title>
   <meta name="description" content="Fabricio is helping 100 people solve real problems with AI, for free. Tell him about your problem. If he can help, he'll build the solution."/>
 
-  <!-- Open Graph / social sharing -->
   <meta property="og:type"        content="website"/>
   <meta property="og:title"       content="Project #100 — Free AI solutions for 100 people"/>
   <meta property="og:description" content="Fabricio is helping 100 people solve real problems with AI, for free. Tell him about your problem. If he can help, he'll build the solution."/>
-  <!-- Replace the URL below with your live domain once deployed -->
   <meta property="og:url"         content="https://project100.dev"/>
   <meta property="og:image"       content="https://project100.dev/2.%20Images/og.jpg.png"/>
   <meta name="twitter:card"       content="summary_large_image"/>
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 
-  <!-- Google Analytics — replace G-6D01FZTZ0R with your Measurement ID -->
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6D01FZTZ0R"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -26,230 +24,563 @@
     gtag('config', 'G-6D01FZTZ0R');
   </script>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-
-  <link rel="stylesheet" href="5. Styles/style.css"/>
-</head>
-<body>
-
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="nav-logo">Project #100</div>
-    <button class="nav-cta open-form-btn">Join the 100</button>
-  </nav>
-
-
-  <!-- HERO -->
-  <section id="hero" class="hero">
-    <div class="hero-bg">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-    </div>
-    <div class="hero-content">
-      <p class="hero-tag">Project #100</p>
-      <h1 class="hero-headline">I want to help 100 people.<br>One problem at a time.</h1>
-      <p class="hero-sub">Got a problem worth solving? I'd love to hear about it.*</p>
-      <button class="cta-btn open-form-btn">Join the 100</button>
-      <p class="hero-note">6 completed &nbsp;·&nbsp; 1 in progress &nbsp;·&nbsp; 93 spots left</p>
-      <p class="hero-asterisk">* I invest my own time and money into every project. You just need a problem worth solving.</p>
-    </div>
-    <a href="#offer" class="scroll-hint" aria-label="Scroll down"></a>
-  </section>
-
-
-  <!-- WHAT YOU GET -->
-  <section id="offer" class="offer">
-    <div class="container">
-      <h2 class="section-headline">Here's how it works.</h2>
-      <div class="offer-cards">
-        <div class="offer-card">
-          <div class="offer-number">01</div>
-          <h3>Tell me about your problem</h3>
-          <p>Fill in the short form and describe what you want to solve.</p>
-        </div>
-        <div class="offer-card">
-          <div class="offer-number">02</div>
-          <h3>We talk through it</h3>
-          <p>We get on a quick call and figure out together the best approach to take.</p>
-        </div>
-        <div class="offer-card">
-          <div class="offer-number">03</div>
-          <h3>I build the solution</h3>
-          <p>I design and build it myself and cover any costs involved.</p>
-        </div>
-      </div>
-      <div class="offer-cta">
-        <button class="cta-btn offer-cta-btn open-form-btn">Join the 100</button>
-      </div>
-      <a href="#testimonials" class="scroll-hint scroll-hint--inline" aria-label="Scroll down"></a>
-    </div>
-  </section>
-
-
-
-
-  <!-- TESTIMONIALS -->
-  <section id="testimonials" class="testimonials">
-    <div class="container">
-      <p class="section-tag">What people say</p>
-      <div class="testimonial-card">
-        <p class="testimonial-quote">"Wow that was truly incredible — in less than 24 hours you were able to create this. I loved it. You put a smile on my face. Fabricio you are very passionate, talented, and generously helped me with my guest experiences project. From the first interaction you worked immediately and exceeded my expectations!"</p>
-        <div class="testimonial-author">
-          <p class="testimonial-name">Joseph LoBello</p>
-          <p class="testimonial-role">Project #4 — XPerience Intake Form</p>
-        </div>
-      </div>
-      <a href="#final-cta" class="scroll-hint scroll-hint--inline" aria-label="Scroll down"></a>
-    </div>
-  </section>
-
-
-  <!-- FINAL CTA -->
-  <section id="final-cta" class="final-cta">
-    <div class="container">
-      <h2 class="section-headline">Want to be one of the 100?</h2>
-      <p class="final-sub">Fill the quick form with a few details and I'll get back to you.</p>
-      <button class="cta-btn open-form-btn">Join the 100</button>
-    </div>
-  </section>
-
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <a href="#" class="footer-link">Project #100</a>
-    <span class="footer-sep">·</span>
-    <a href="https://portfolio.project100.dev/#projects" class="footer-link" target="_blank" rel="noopener noreferrer">See all projects</a>
-  </footer>
-
-
-  <!-- ============================================================
-       FORM OVERLAY
-       ============================================================ -->
-  <div class="form-overlay" id="formOverlay" aria-modal="true" role="dialog">
-
-    <div class="form-modal">
-
-    <div class="overlay-header">
-      <button class="overlay-back" id="overlayBack" aria-label="Go back">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Back
-      </button>
-
-      <div class="form-progress">
-        <div class="form-progress-bar" id="progressBar"></div>
-      </div>
-
-      <button class="overlay-close" id="overlayClose" aria-label="Close">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <div class="overlay-body">
-      <div class="form-steps" id="formSteps">
-
-        <!-- Step 1: Name -->
-        <div class="form-step" data-step="1">
-          <p class="form-question">First, what's your name?</p>
-          <input type="text" class="form-input" id="contactName" placeholder="Your name..." autocomplete="off"/>
-          <button class="form-next-btn" id="step1NextBtn">Continue</button>
-        </div>
-
-        <!-- Step 2: Email -->
-        <div class="form-step" data-step="2">
-          <p class="form-question">And your email?</p>
-          <p class="form-hint">So I can follow up, even if life gets in the way.</p>
-          <input type="email" class="form-input" id="contactEmail" placeholder="Your email..." autocomplete="off"/>
-          <button class="form-next-btn" id="step2NextBtn">Continue</button>
-        </div>
-
-        <!-- Step 3: Business type -->
-        <div class="form-step" data-step="3">
-          <p class="form-question">What type of business do you run?</p>
-          <p class="form-hint">e.g. restaurant, online shop, law firm, marketing agency</p>
-          <input type="text" class="form-input" id="businessType" placeholder="Your business..." autocomplete="off"/>
-          <button class="form-next-btn" id="step3NextBtn">Continue</button>
-        </div>
-
-        <!-- Step 4: Biggest time drain -->
-        <div class="form-step" data-step="4">
-          <p class="form-question">What's the one problem you'd most like to fix right now?</p>
-          <p class="form-hint">Try to be specific, it helps me start thinking about the right solution for you.</p>
-          <textarea class="form-textarea" id="timeDrain" placeholder="Tell me..."></textarea>
-          <button class="form-next-btn" id="step4NextBtn">Continue</button>
-        </div>
-
-        <!-- Step 5: Revenue -->
-        <div class="form-step" data-step="5">
-          <p class="form-question">What's your annual revenue?</p>
-          <div class="choice-grid choice-grid--vertical">
-            <button class="choice-btn choice-btn--wide" data-value="no-revenue">No revenue yet</button>
-            <button class="choice-btn choice-btn--wide" data-value="under-10k">Under £10k</button>
-            <button class="choice-btn choice-btn--wide" data-value="10k-50k">£10k – £50k</button>
-            <button class="choice-btn choice-btn--wide" data-value="50k-200k">£50k – £200k</button>
-            <button class="choice-btn choice-btn--wide" data-value="200k-plus">£200k+</button>
-          </div>
-        </div>
-
-        <!-- Step 6: Phone -->
-        <div class="form-step" data-step="6">
-          <p class="form-question">Last one — what's your phone number?</p>
-          <p class="form-hint">WhatsApp works too. I'll use this to get in touch with you.</p>
-          <input type="tel" class="form-input" id="contactPhone" placeholder="Your phone / WhatsApp..." autocomplete="off"/>
-          <button class="form-next-btn" id="submitBtn">Send it over</button>
-        </div>
-
-        <!-- Step 8: Confirmation (shown after successful submission) -->
-        <div class="form-step" data-step="8">
-          <p class="form-question">You're in.</p>
-          <p class="form-hint">I'll go through your answers and get in touch with you within 48 hours. Talk soon.</p>
-        </div>
-
-      </div>
-    </div>
-
-    </div> <!-- /.form-modal -->
-  </div>
-
-
-  <!-- ============================================================
-       CONFIRM CLOSE MODAL
-       ============================================================ -->
-  <div class="confirm-overlay" id="confirmOverlay">
-    <div class="confirm-card">
-      <p class="confirm-title">Leave the form?</p>
-      <p class="confirm-sub">Your answers will be lost.</p>
-      <div class="confirm-actions">
-        <button class="confirm-btn confirm-btn--leave" id="confirmLeave">Leave</button>
-        <button class="confirm-btn confirm-btn--stay"  id="confirmStay">Keep going</button>
-      </div>
-    </div>
-  </div>
-
-
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init('UcV5udj6LZbempulE');</script>
 
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
   <!-- Firebase compat -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey:            "AIzaSyCMDs9nE7WmwR8ZKVhlJ3K8AvjzK99P7V0",
+      authDomain:        "ai-project-74ae8.firebaseapp.com",
+      projectId:         "ai-project-74ae8",
+      storageBucket:     "ai-project-74ae8.firebasestorage.app",
+      messagingSenderId: "1082716823633",
+      appId:             "1:1082716823633:web:73c127a01e108604861870",
+      measurementId:     "G-6D01FZTZ0R"
+    });
+  </script>
 
-  <!-- App scripts -->
-  <script src="3. Scripts/firebase.js"></script>
-  <script src="3. Scripts/form.js"></script>
-  <script src="3. Scripts/main.js"></script>
+  <!-- Claude Design runtime -->
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#1a1410;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  ::selection{background:#e08a3c;color:#1a1410}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes gridPop{from{opacity:0;transform:scale(.35)}to{opacity:1;transform:none}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes popIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  input::placeholder,textarea::placeholder{color:#6b6253}
+</style>
+</helmet>
 
+<div style="--accent:{{ accent }};background:#1a1410;min-height:100vh;overflow-x:hidden;">
+  <div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:90;opacity:0.06;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);background-size:200px 200px;"></div>
+  <main data-screen-label="Monument" style="font-family:'Archivo',sans-serif;color:#f0e6d2;">
+
+    <header style="display:flex;justify-content:space-between;align-items:center;max-width:1280px;margin:0 auto;padding:64px 40px 0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#a99d88;animation:fadeIn .8s forwards;">
+      <span style="color:#f0e6d2;font-weight:700;">PROJECT&nbsp;#100</span>
+      <span>100&nbsp;people&nbsp;·&nbsp;real&nbsp;problems&nbsp;·&nbsp;zero&nbsp;cost</span>
+    </header>
+
+    <section style="max-width:1280px;margin:0 auto;padding:40px 40px 60px;display:grid;grid-template-columns:1.15fr 0.85fr;gap:60px;align-items:center;">
+      <div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;animation:fadeUp .6s forwards;">92 spots left</p>
+        <h1 style="font-weight:900;font-size:clamp(38px,4.9vw,72px);line-height:0.95;letter-spacing:-0.03em;text-transform:uppercase;animation:fadeUp .7s forwards .05s;">I want to help <span data-hero-num data-to="100" data-dur="1100" style="color:var(--accent);">0</span> people.</h1>
+        <p style="font-weight:900;font-size:clamp(20px,2.5vw,32px);line-height:1;text-transform:uppercase;letter-spacing:-0.02em;color:#cbbfa8;margin-top:12px;animation:fadeUp .7s forwards .1s;">One problem at a time.</p>
+        <p style="font-size:clamp(18px,2vw,24px);line-height:1.45;color:#cbbfa8;max-width:32ch;margin-top:26px;font-weight:500;animation:fadeUp .7s forwards .18s;">You bring the problem; I design, build, and cover the cost.</p>
+        <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:38px;animation:fadeUp .7s forwards .25s;">
+          <a href="#" onClick="{{ openForm }}" style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;background:var(--accent);color:#1a1410;padding:18px 34px;border-radius:3px;text-decoration:none;font-weight:700;transition:transform .2s,box-shadow .2s;" style-hover="transform:translateY(-3px);box-shadow:0 16px 36px -12px var(--accent)">Join the 100 →</a>
+        </div>
+      </div>
+
+      <div style="position:relative;animation:fadeIn .8s forwards .2s;">
+        <div data-grid style="display:grid;grid-template-columns:repeat(10,1fr);gap:7px;">
+          <sc-for list="{{ cells }}" as="cell" hint-placeholder-count="100">
+            <span data-cell data-st="{{ cell.st }}" data-msg="{{ cell.msg }}" style="position:relative;aspect-ratio:1;border-radius:3px;border:1.5px solid {{ cell.border }};background:{{ cell.bg }};animation:{{ cell.anim }};cursor:{{ cell.cursor }};transition:transform .15s,background .15s,border-color .15s;" style-hover="transform:scale(1.25);z-index:5"></span>
+          </sc-for>
+        </div>
+        <div data-tip style="position:absolute;left:0;top:0;transform:translate(-50%,calc(-100% - 4px));pointer-events:none;opacity:0;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.04em;padding:6px 10px;border-radius:4px;border:1px solid var(--accent);background:var(--accent);color:#1a1410;box-shadow:0 8px 20px -8px rgba(0,0,0,0.6);transition:opacity .15s,transform .15s;z-index:20;">could be yours</div>
+        <div style="display:flex;gap:20px;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#a99d88;">
+          <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--accent);vertical-align:middle;margin-right:6px;"></span>7 done</span>
+          <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid var(--accent);vertical-align:middle;margin-right:6px;animation:pulse 1.5s infinite;"></span>1 in progress</span>
+          <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid rgba(240,230,210,0.2);vertical-align:middle;margin-right:6px;"></span>92 open</span>
+        </div>
+      </div>
+    </section>
+
+    <section data-reveal data-count-band style="background:#221b14;border-top:1px solid rgba(240,230,210,0.1);border-bottom:1px solid rgba(240,230,210,0.1);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
+      <div style="max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(3,1fr);">
+        <div style="padding:50px 0;text-align:center;border-right:1px solid rgba(240,230,210,0.1);">
+          <div style="font-weight:900;font-size:clamp(56px,8vw,120px);line-height:1;color:var(--accent);letter-spacing:-0.04em;"><span data-countup data-to="7" data-pad="2">00</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#a99d88;margin-top:10px;">Completed</div>
+        </div>
+        <div style="padding:50px 0;text-align:center;border-right:1px solid rgba(240,230,210,0.1);">
+          <div style="font-weight:900;font-size:clamp(56px,8vw,120px);line-height:1;color:#f0e6d2;letter-spacing:-0.04em;"><span data-countup data-to="1" data-pad="2">00</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#a99d88;margin-top:10px;">In&nbsp;progress</div>
+        </div>
+        <div style="padding:50px 0;text-align:center;">
+          <div style="font-weight:900;font-size:clamp(56px,8vw,120px);line-height:1;color:#f0e6d2;letter-spacing:-0.04em;"><span data-countup data-to="92" data-pad="2">00</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#a99d88;margin-top:10px;">Spots&nbsp;left</div>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width:1280px;margin:0 auto;padding:96px 40px;">
+      <h2 data-reveal style="font-weight:900;font-size:clamp(32px,5vw,68px);text-transform:uppercase;letter-spacing:-0.02em;margin-bottom:48px;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">Here's how<br>it works.</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+        <sc-for list="{{ steps }}" as="step" hint-placeholder-count="3">
+          <div data-reveal style="background:#221b14;border-radius:6px;padding:36px 30px;opacity:0;transition:opacity .7s ease {{ step.delay }},transform .2s,background .2s;" style-hover="transform:translateY(-4px);background:#2a2118">
+            <div style="font-weight:900;font-size:72px;line-height:0.85;color:var(--accent);letter-spacing:-0.04em;">{{ step.n }}</div>
+            <h3 style="font-weight:800;font-size:22px;margin:24px 0 12px;line-height:1.15;">{{ step.title }}</h3>
+            <p style="font-size:16px;line-height:1.6;color:#cbbfa8;font-weight:500;">{{ step.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-reveal style="max-width:1040px;margin:0 auto;padding:80px 40px 100px;text-align:center;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
+      <p style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:44px;">What people say</p>
+      <div style="height:320px;display:flex;flex-direction:column;justify-content:center;opacity:{{ tOpacity }};transition:opacity .45s ease;">
+        <blockquote style="font-weight:800;font-size:clamp(23px,2.9vw,40px);line-height:1.26;letter-spacing:-0.02em;max-width:24ch;margin:0 auto;">"{{ quote.pre }}<span style="color:var(--accent);">{{ quote.hi }}</span>{{ quote.post }}"</blockquote>
+        <p style="margin-top:36px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;color:#a99d88;"><span style="color:#f0e6d2;">{{ quote.name }}</span>&nbsp;&nbsp;·&nbsp;&nbsp;{{ quote.meta }}</p>
+      </div>
+      <div style="display:flex;gap:9px;justify-content:center;margin-top:48px;">
+        <sc-for list="{{ tDots }}" as="d" hint-placeholder-count="2">
+          <button onClick="{{ d.go }}" aria-label="Show testimonial" style="width:{{ d.w }};height:8px;border-radius:4px;border:none;padding:0;cursor:pointer;background:{{ d.bg }};transition:width .35s,background .35s;"></button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="background:var(--accent);color:#1a1410;">
+      <div data-reveal style="max-width:1280px;margin:0 auto;padding:110px 40px;text-align:center;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);">
+        <h2 style="font-weight:900;font-size:clamp(40px,8vw,120px);line-height:0.92;text-transform:uppercase;letter-spacing:-0.03em;">Be one<br>of the 100.</h2>
+        <p style="font-size:clamp(17px,2vw,22px);font-weight:600;margin:28px auto 40px;max-width:34ch;opacity:0.8;">Fill the quick form with a few details and I'll get back to you within 12 hours.</p>
+        <a href="#" onClick="{{ openForm }}" style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;background:#1a1410;color:#f0e6d2;padding:19px 40px;border-radius:3px;text-decoration:none;font-weight:700;display:inline-block;transition:transform .2s;" style-hover="transform:translateY(-3px)">Join the 100 →</a>
+      </div>
+    </section>
+
+    <footer style="max-width:1280px;margin:0 auto;padding:36px 40px 60px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#8a7e6b;">
+      <span>PROJECT #100</span>
+      <a href="https://portfolio.project100.dev/#projects" target="_blank" rel="noopener noreferrer" style="color:#8a7e6b;text-decoration:none;transition:color .2s;" style-hover="color:#f0e6d2">SEE ALL PROJECTS ↗</a>
+    </footer>
+  </main>
+
+  <!-- FORM MODAL -->
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ onOverlayClick }}" style="position:fixed;inset:0;z-index:100;background:rgba(8,6,4,0.8);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s forwards;">
+    <div data-modal style="position:relative;width:100%;max-width:600px;background:#1a1410;color:#f0e6d2;border:1px solid rgba(240,230,210,0.14);border-radius:12px;padding:44px 44px 40px;box-shadow:0 40px 100px -24px rgba(0,0,0,0.8);font-family:'Archivo',sans-serif;animation:popIn .3s forwards;">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;font-family:'JetBrains Mono',monospace;">
+        <sc-if value="{{ showBack }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ back }}" style="background:none;border:none;color:#a99d88;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:0;" style-hover="color:#f0e6d2">← Back</button>
+        </sc-if>
+        <sc-if value="{{ hideBack }}" hint-placeholder-val="{{ true }}">
+          <span style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#f0e6d2;font-weight:700;">PROJECT #100</span>
+        </sc-if>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#a99d88;">{{ progressLabel }}</span>
+          <button onClick="{{ closeForm }}" style="background:none;border:1px solid rgba(240,230,210,0.18);border-radius:50%;width:30px;height:30px;color:#a99d88;cursor:pointer;font-size:14px;line-height:1;" style-hover="color:#f0e6d2;border-color:rgba(240,230,210,0.4)">✕</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:5px;margin-bottom:34px;">
+        <sc-for list="{{ progressCells }}" as="p" hint-placeholder-count="4">
+          <span style="height:4px;flex:1;border-radius:2px;background:{{ p.bg }};transition:background .3s;"></span>
+        </sc-for>
+      </div>
+
+      <!-- Success -->
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:8px 0 20px;">
+          <div style="width:54px;height:54px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#1a1410;font-size:30px;font-weight:900;margin-bottom:28px;">✓</div>
+          <h2 style="font-weight:900;font-size:clamp(36px,6vw,56px);text-transform:uppercase;letter-spacing:-0.02em;line-height:0.95;">You're in.</h2>
+          <p style="font-size:18px;line-height:1.55;color:#cbbfa8;font-weight:500;margin-top:20px;max-width:42ch;">I'll go through your answers and get in touch within 12 hours. Talk soon.</p>
+          <button onClick="{{ closeForm }}" style="margin-top:34px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;background:var(--accent);color:#1a1410;padding:15px 30px;border:none;border-radius:3px;font-weight:700;cursor:pointer;transition:transform .2s;" style-hover="transform:translateY(-2px)">Done</button>
+        </div>
+      </sc-if>
+
+      <!-- Question -->
+      <sc-if value="{{ notDone }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <h2 style="font-weight:800;font-size:clamp(24px,3.4vw,34px);line-height:1.15;letter-spacing:-0.01em;color:#f0e6d2;">{{ question }}</h2>
+          <sc-if value="{{ hasSub }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size:15px;line-height:1.5;color:#a99d88;font-weight:500;margin-top:12px;">{{ sub }}</p>
+          </sc-if>
+
+          <div style="margin-top:28px;">
+            <sc-if value="{{ isTextarea }}" hint-placeholder-val="{{ false }}">
+              <textarea onInput="{{ onField }}" value="{{ value }}" rows="4" placeholder="{{ placeholder }}" style="width:100%;background:#221b14;border:1px solid rgba(240,230,210,0.16);border-radius:6px;padding:16px 18px;color:#f0e6d2;font-family:'Archivo',sans-serif;font-size:17px;font-weight:500;resize:vertical;outline:none;line-height:1.5;" style-focus="border-color:var(--accent)"></textarea>
+            </sc-if>
+            <sc-if value="{{ isText }}" hint-placeholder-val="{{ true }}">
+              <input onInput="{{ onField }}" value="{{ value }}" type="{{ inputType }}" placeholder="{{ placeholder }}" style="width:100%;background:#221b14;border:1px solid rgba(240,230,210,0.16);border-radius:6px;padding:16px 18px;color:#f0e6d2;font-family:'Archivo',sans-serif;font-size:18px;font-weight:600;outline:none;" style-focus="border-color:var(--accent)">
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ submitError }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size:13px;color:#ff7c5c;margin-top:14px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;">{{ submitError }}</p>
+          </sc-if>
+
+          <sc-if value="{{ showContinue }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ next }}" disabled="{{ continueDisabled }}" style="{{ continueStyle }}" style-hover="transform:translateY(-2px)">{{ continueLabel }} →</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- Confirm close -->
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+  <div data-confirm style="position:fixed;inset:0;z-index:110;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(8,6,4,0.7);">
+    <div style="width:100%;max-width:360px;background:#1a1410;border:1px solid rgba(240,230,210,0.14);border-radius:12px;padding:40px 44px;text-align:center;animation:popIn .25s forwards;">
+      <p style="font-weight:800;font-size:22px;letter-spacing:-0.01em;margin-bottom:10px;color:#f0e6d2;">Leave the form?</p>
+      <p style="font-size:15px;color:#a99d88;font-weight:500;margin-bottom:32px;">Your answers will be lost.</p>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button onClick="{{ confirmLeave }}" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;background:transparent;border:1px solid rgba(240,230,210,0.2);color:#a99d88;padding:12px 24px;border-radius:3px;cursor:pointer;font-weight:700;transition:border-color .2s,color .2s;" style-hover="border-color:rgba(240,230,210,0.5);color:#f0e6d2">Leave</button>
+        <button onClick="{{ confirmStay }}" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;background:var(--accent);border:none;color:#1a1410;padding:12px 24px;border-radius:3px;cursor:pointer;font-weight:700;transition:transform .2s;" style-hover="transform:translateY(-2px)">Keep going</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#e08a3c&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { open: false, step: 0, data: {}, tIndex: 0, tOpacity: 1, confirmOpen: false, submitting: false, submitError: null };
+
+  testimonials = [
+    { pre: 'In less than 24 hours you created this. You ', hi: 'exceeded my expectations.', post: '', name: 'JOSEPH LOBELLO', meta: 'PROJECT #4 — XPERIENCE INTAKE FORM' },
+    { pre: "Fabrício's ticketing system gave me and the engravers time to ", hi: 'focus on the work', post: ', instead of constantly answering customers asking if their engraving was ready.', name: 'MARTINA S.', meta: 'MRL — EVENT TICKETING' }
+  ];
+
+  formSteps = [
+    { key: 'name',    type: 'text',     q: "First, what's your name?",                                          placeholder: 'Your name' },
+    { key: 'email',   type: 'email',    q: 'And your email?',            sub: 'So I can follow up, even if life gets in the way.',                                              placeholder: 'you@email.com' },
+    { key: 'problem', type: 'textarea', q: "What's the one problem you'd most like to fix right now?",          sub: 'Try to be specific — it helps me start thinking about the right solution for you.', placeholder: 'Describe the problem…' },
+    { key: 'phone',   type: 'tel',      q: "Last one — what's your phone number?", sub: "WhatsApp works too. I'll use this to get in touch with you.",                          placeholder: '+44 …' }
+  ];
+
+  renderVals() {
+    const accent = this.props.accent || '#e08a3c';
+
+    const shipped = {
+      1: "#1 · the page you're on right now",
+      2: '#2 · MRL site — live & humming',
+      3: '#3 · IRL Quests — go touch grass',
+      4: '#4 · MyRaceCard — vroom vroom',
+      5: '#5 · XPerience intake — forms, but fun',
+      6: '#6 · Engraving queue — etched in',
+      7: '#7 · Portfolio — it animates, obviously'
+    };
+    const invites = ['could be yours', 'your project here?', 'claim this spot', "let's build yours", "this one's open", 'bring your problem', 'reserved for you?', 'what would you build?'];
+
+    const cells = [];
+    for (let i = 1; i <= 100; i++) {
+      const st = i <= 7 ? 'done' : (i === 8 ? 'progress' : 'open');
+      const bg = st === 'done' ? 'var(--accent)' : 'transparent';
+      const border = st === 'open' ? 'rgba(240,230,210,0.20)' : 'var(--accent)';
+      const delay = (Math.min(i * 9, 950) / 1000) + 's';
+      const anim = st === 'progress' ? 'pulse 1.5s ease-in-out infinite' : ('gridPop 0.45s forwards ' + delay);
+      const msg = st === 'done' ? shipped[i] : (st === 'progress' ? '#8 · building this one now' : invites[i % invites.length]);
+      const cursor = st === 'open' ? 'pointer' : 'default';
+      cells.push({ st, bg, border, anim, msg, cursor });
+    }
+
+    const steps = [
+      { n: '01', delay: '0.05s', title: 'Tell me about your problem', body: 'Fill in the short form and describe what you want to solve.' },
+      { n: '02', delay: '0.15s', title: 'We talk through it',         body: 'We chat about it and figure out together the best approach to take.' },
+      { n: '03', delay: '0.25s', title: 'I build the solution',       body: 'I design and build it myself and cover any direct costs involved.' }
+    ];
+
+    const step  = this.state.step;
+    const total = this.formSteps.length;
+    const isDone = step >= total;
+    const cur = isDone ? null : this.formSteps[step];
+    const value = cur ? (this.state.data[cur.key] || '') : '';
+    const isTextarea = !!cur && cur.type === 'textarea';
+    const isText     = !!cur && !isTextarea;
+    const inputType  = cur && cur.type === 'email' ? 'email' : (cur && cur.type === 'tel' ? 'tel' : 'text');
+    const isLastStep = step === total - 1;
+    const continueDisabled = !String(value).trim() || this.state.submitting;
+    const pad = (n) => (n < 10 ? '0' + n : '' + n);
+
+    const continueBase = "margin-top:28px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:#1a1410;padding:15px 30px;border:none;border-radius:3px;font-weight:700;transition:transform .2s,opacity .2s;";
+
+    const tIndex = this.state.tIndex % this.testimonials.length;
+    const quote  = this.testimonials[tIndex];
+    const tDots  = this.testimonials.map((t, i) => ({
+      go: () => this._goTestimonial(i),
+      w:  i === tIndex ? '30px' : '8px',
+      bg: i === tIndex ? 'var(--accent)' : 'rgba(240,230,210,0.22)'
+    }));
+
+    return {
+      accent, cells, steps,
+      quote, tDots, tOpacity: this.state.tOpacity,
+      open:        this.state.open,
+      confirmOpen: this.state.confirmOpen,
+      submitError: this.state.submitError,
+
+      openForm: (e) => { if (e && e.preventDefault) e.preventDefault(); this._openForm(); },
+
+      closeForm: () => {
+        if (isDone)   { this.setState({ open: false, confirmOpen: false }); return; }
+        if (step > 0) { this.setState({ confirmOpen: true }); return; }
+        this.setState({ open: false });
+      },
+
+      onOverlayClick: (e) => {
+        if (this.state.confirmOpen) return;
+        if (e && e.target && e.target.closest && !e.target.closest('[data-modal]')) {
+          if (!isDone && step > 0) { this.setState({ confirmOpen: true }); }
+          else { this.setState({ open: false }); }
+        }
+      },
+
+      confirmLeave: () => this.setState({ open: false, confirmOpen: false }),
+      confirmStay:  () => this.setState({ confirmOpen: false }),
+
+      back: () => this.setState((s) => ({ step: Math.max(0, s.step - 1), submitError: null })),
+
+      next: () => {
+        if (this.state.submitting) return;
+        if (isLastStep) { this._submit(); }
+        else {
+          this._trackStep(step + 1);
+          this._updateSession(step + 2);
+          this.setState((s) => ({ step: s.step + 1, submitError: null }));
+        }
+      },
+
+      onField: (e) => {
+        const v = e.target.value;
+        this.setState((s) => ({ data: Object.assign({}, s.data, { [this.formSteps[s.step].key]: v }) }));
+      },
+
+      isDone, notDone: !isDone,
+      showBack: !isDone && step > 0,
+      hideBack: isDone || step === 0,
+      question:    cur ? cur.q   : '',
+      sub:         cur && cur.sub ? cur.sub : '',
+      hasSub:      !!(cur && cur.sub),
+      placeholder: cur && cur.placeholder ? cur.placeholder : '',
+      value, isTextarea, isText, inputType,
+      showContinue:    !isDone,
+      continueDisabled,
+      continueStyle:   continueBase + 'background:var(--accent);cursor:' + (continueDisabled ? 'not-allowed' : 'pointer') + ';opacity:' + (continueDisabled ? '0.4' : '1') + ';',
+      continueLabel:   isDone ? '' : (isLastStep ? (this.state.submitting ? 'Sending...' : 'Send it over') : 'Continue'),
+      progressLabel:   isDone ? 'Complete' : (pad(step + 1) + ' / ' + pad(total)),
+      progressCells:   Array.from({ length: total }, (_, i) => ({ bg: i < step || isDone ? 'var(--accent)' : (i === step ? 'var(--accent)' : 'rgba(240,230,210,0.14)') }))
+    };
+  }
+
+  componentDidMount() {
+    this._bindHover();
+    this._animateHero();
+    this._observeReveal();
+    this._settle();
+    this._startTestimonials();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._tTimer);
+    clearTimeout(this._tSwap);
+    if (this._revealScroll) {
+      window.removeEventListener('scroll', this._revealScroll);
+      window.removeEventListener('resize', this._revealScroll);
+    }
+  }
+
+  _openForm() {
+    this._startSession();
+    this.setState({ open: true, step: 0, data: {}, confirmOpen: false, submitError: null });
+  }
+
+  async _submit() {
+    if (this.state.submitting) return;
+    const d = Object.assign({}, this.state.data);
+    this.setState({ submitting: true, submitError: null });
+
+    const payload = {
+      contactName:  d.name    || '',
+      contactEmail: d.email   || '',
+      problem:      d.problem || '',
+      contactPhone: d.phone   || '',
+      submittedAt:  new Date().toISOString()
+    };
+
+    try {
+      await window.firebase.firestore().collection('ai-business-leads').add(payload);
+
+      if (this._sessionId) {
+        window.firebase.firestore().collection('ai-business-sessions')
+          .doc(this._sessionId)
+          .update({ completed: true, completedAt: new Date().toISOString() })
+          .catch(() => {});
+      }
+
+      if (window.emailjs) {
+        window.emailjs.send('service_lu1el6c', 'template_37u59ak', {
+          contact_name:  payload.contactName,
+          contact_email: payload.contactEmail,
+          business_type: '',
+          time_drain:    payload.problem,
+          revenue:       '',
+          contact_phone: payload.contactPhone || 'Not provided'
+        }).catch(err => console.warn('EmailJS failed:', err));
+      }
+
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'form_submitted', { contact_email: payload.contactEmail });
+      }
+
+      this.setState({ submitting: false, step: this.formSteps.length });
+    } catch (err) {
+      console.error('Submission error:', err);
+      this.setState({ submitting: false, submitError: 'Something went wrong. Please try again.' });
+    }
+  }
+
+  _startSession() {
+    if (!window.firebase) return;
+    this._sessionId = null;
+    window.firebase.firestore().collection('ai-business-sessions').add({
+      startedAt: new Date().toISOString(),
+      lastStep:  1,
+      completed: false
+    }).then(ref => { this._sessionId = ref.id; }).catch(() => {});
+  }
+
+  _updateSession(step) {
+    if (!this._sessionId || !window.firebase) return;
+    window.firebase.firestore().collection('ai-business-sessions')
+      .doc(this._sessionId)
+      .update({ lastStep: step, lastUpdated: new Date().toISOString() })
+      .catch(() => {});
+  }
+
+  _trackStep(stepIndex) {
+    if (typeof gtag === 'undefined') return;
+    const names = ['name', 'email', 'problem', 'phone'];
+    gtag('event', 'form_step_view', { step_number: stepIndex + 1, step_name: names[stepIndex] || 'unknown' });
+  }
+
+  _startTestimonials() {
+    if (this._tBound) return;
+    this._tBound = true;
+    this._tTimer = setInterval(() => this._advance((this.state.tIndex + 1) % this.testimonials.length), 6500);
+  }
+
+  _advance(i) {
+    this.setState({ tOpacity: 0 });
+    clearTimeout(this._tSwap);
+    this._tSwap = setTimeout(() => this.setState({ tIndex: i, tOpacity: 1 }), 450);
+  }
+
+  _goTestimonial(i) {
+    if (i === this.state.tIndex % this.testimonials.length) return;
+    clearInterval(this._tTimer);
+    this._tTimer = setInterval(() => this._advance((this.state.tIndex + 1) % this.testimonials.length), 6500);
+    this._advance(i);
+  }
+
+  _bindHover() {
+    if (this._hoverBound) return;
+    this._hoverBound = true;
+    const accent = () => this.props.accent || '#e08a3c';
+    const show = (cell) => {
+      const grid = cell.closest('[data-grid]');
+      const wrap = grid && grid.parentElement;
+      const tip  = wrap && wrap.querySelector('[data-tip]');
+      if (!tip) return;
+      const cr   = cell.getBoundingClientRect();
+      const wr   = wrap.getBoundingClientRect();
+      const open = cell.getAttribute('data-st') === 'open';
+      const flip = (cr.top - wr.top) < 44;
+      tip.textContent    = cell.getAttribute('data-msg') || '';
+      tip.style.left     = (cr.left - wr.left + cr.width / 2) + 'px';
+      tip.style.top      = (flip ? (cr.bottom - wr.top) : (cr.top - wr.top)) + 'px';
+      tip.style.background   = open ? accent() : '#221b14';
+      tip.style.color        = open ? '#1a1410' : '#f0e6d2';
+      tip.style.borderColor  = open ? accent() : 'rgba(240,230,210,0.25)';
+      tip.style.opacity      = '1';
+      tip.style.transform    = flip ? 'translate(-50%, 12px)' : 'translate(-50%, calc(-100% - 12px))';
+      if (open) { cell.style.background = 'rgba(224,138,60,0.22)'; cell.style.borderColor = accent(); }
+    };
+    const hide = (cell) => {
+      const grid = cell.closest('[data-grid]');
+      const tip  = grid && grid.parentElement && grid.parentElement.querySelector('[data-tip]');
+      if (tip) tip.style.opacity = '0';
+      if (cell.getAttribute('data-st') === 'open') { cell.style.background = 'transparent'; cell.style.borderColor = 'rgba(240,230,210,0.20)'; }
+    };
+    document.addEventListener('mouseover', (e) => { const c = e.target.closest && e.target.closest('[data-cell]'); if (c) show(c); });
+    document.addEventListener('mouseout',  (e) => { const c = e.target.closest && e.target.closest('[data-cell]'); if (c) hide(c); });
+    document.addEventListener('click',     (e) => { const c = e.target.closest && e.target.closest('[data-cell]'); if (c && c.getAttribute('data-st') === 'open') this._openForm(); });
+  }
+
+  _settle() {
+    setTimeout(() => {
+      document.querySelectorAll('main [style*="fadeUp"], main [style*="fadeIn"], main [style*="gridPop"]').forEach((el) => { el.style.animation = 'none'; });
+    }, 1100);
+  }
+
+  _animateCount(el) {
+    if (el.dataset.counted) return;
+    el.dataset.counted = '1';
+    const to  = +el.dataset.to;
+    const pad = +el.dataset.pad || 0;
+    const dur = +el.dataset.dur || 1100, start = performance.now();
+    const tick = (t) => {
+      const p = Math.min(1, (t - start) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pad ? String(Math.round(to * e)).padStart(pad, '0') : String(Math.round(to * e));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  _animateHero() {
+    setTimeout(() => { const h = document.querySelector('[data-hero-num]'); if (h) this._animateCount(h); }, 250);
+  }
+
+  _reveal(el) {
+    if (el.dataset.revealed) return;
+    el.dataset.revealed = '1';
+    el.style.transition = 'none';
+    const dur = 700, start = performance.now();
+    const tick = (t) => {
+      const p = Math.min(1, (t - start) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.style.opacity   = String(e);
+      el.style.transform = 'translateY(' + ((1 - e) * 24) + 'px)';
+      if (p < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.style.opacity   = '1';
+        el.style.transform = 'none';
+        el.style.transition = 'transform .2s,background .2s';
+      }
+    };
+    requestAnimationFrame(tick);
+    if (el.hasAttribute('data-count-band')) {
+      el.querySelectorAll('[data-countup]').forEach((n) => this._animateCount(n));
+    }
+  }
+
+  _observeReveal() {
+    if (this._revealBound) return;
+    this._revealBound = true;
+    const els = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+    const checkInView = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      els.forEach((el) => { if (!el.dataset.revealed) { const r = el.getBoundingClientRect(); if (r.top < vh * 0.92) this._reveal(el); } });
+    };
+    try {
+      const io = new IntersectionObserver((entries) => { entries.forEach((en) => { if (en.isIntersecting) this._reveal(en.target); }); }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+      els.forEach((el) => io.observe(el));
+    } catch(e) {}
+    checkInView();
+    this._revealScroll = () => checkInView();
+    window.addEventListener('scroll', this._revealScroll, { passive: true });
+    window.addEventListener('resize', this._revealScroll, { passive: true });
+    setTimeout(() => els.forEach((el) => this._reveal(el)), 2500);
+  }
+}
+</script>
 </body>
 </html>
