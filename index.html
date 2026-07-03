@@ -33,16 +33,9 @@
   <!-- Firebase compat -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="3. Scripts/firebase-config.js"></script>
   <script>
-    firebase.initializeApp({
-      apiKey:            "***REMOVED-FIREBASE-KEY***",
-      authDomain:        "ai-project-74ae8.firebaseapp.com",
-      projectId:         "ai-project-74ae8",
-      storageBucket:     "ai-project-74ae8.firebasestorage.app",
-      messagingSenderId: "1082716823633",
-      appId:             "1:1082716823633:web:73c127a01e108604861870",
-      measurementId:     "G-6D01FZTZ0R"
-    });
+    firebase.initializeApp(firebaseConfig);
   </script>
 
   <!-- Claude Design runtime -->

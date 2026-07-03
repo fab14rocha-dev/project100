@@ -1,15 +1,5 @@
 // firebase.js — Firebase setup and Firestore submission
-// Get your config from: Firebase Console → Project Settings → Your apps → SDK setup and config
-
-const firebaseConfig = {
-  apiKey:            "***REMOVED-FIREBASE-KEY***",
-  authDomain:        "ai-project-74ae8.firebaseapp.com",
-  projectId:         "ai-project-74ae8",
-  storageBucket:     "ai-project-74ae8.firebasestorage.app",
-  messagingSenderId: "1082716823633",
-  appId:             "1:1082716823633:web:73c127a01e108604861870",
-  measurementId:     "G-6D01FZTZ0R"
-};
+// firebaseConfig comes from firebase-config.js, loaded before this script
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
