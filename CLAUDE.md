@@ -22,6 +22,9 @@ Simple goal: help 100 people. 100 different problems, 100 different solutions. F
 - ~~Calendly~~ (removed — booking step was cut from the form flow)
 - Google Analytics (G-6D01FZTZ0R)
 
+## Deploy
+`git push origin main` from inside this folder — this folder has its own nested `.git`, separate from the workspace repo. GitHub Pages serves directly from `main` (no build step, vanilla static files). CNAME file must stay committed for the custom domain.
+
 ## File Structure
 - index.html — main landing page (root, for GitHub Pages)
 - admin.html — password-protected CRM dashboard
