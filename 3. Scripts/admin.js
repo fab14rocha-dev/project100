@@ -18,7 +18,6 @@ let qualifiedLeads  = [];
 let archivedLeads   = [];
 let partialLeads    = [];
 let adEntries       = [];
-let isDemo          = false;
 
 // ─── Login ────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -60,14 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     firebase.auth().signOut();
   });
 
-  document.getElementById('refreshBtn').addEventListener('click', () => {
-    isDemo = false;
-    loadDashboard();
-  });
-  document.getElementById('demoBtn').addEventListener('click', () => {
-    isDemo = true;
-    loadDemoData();
-  });
+  document.getElementById('refreshBtn').addEventListener('click', loadDashboard);
   document.getElementById('clearBtn').addEventListener('click', clearAllData);
 
   // Tab switching
@@ -100,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ─── Load all data ─────────────────────────────────────────────────
 async function loadDashboard() {
-  if (isDemo) return;
   document.getElementById('lastUpdated').textContent = 'Loading...';
 
   let sessions, leads, ads;
@@ -409,56 +400,6 @@ async function updateCrmStatus(id, select) {
   await db.collection('ai-business-leads').doc(id).update({ crmStatus: val });
 }
 
-// ─── Demo data ────────────────────────────────────────────────────
-function loadDemoData() {
-  document.getElementById('lastUpdated').textContent = 'Demo mode — not real data';
-
-  const demoSessions = [
-    ...Array(50).fill(null).map((_, i) => {
-      const stepDist = [50, 42, 35, 28, 22, 18];
-      let lastStep = 1;
-      for (let s = stepDist.length - 1; s >= 0; s--) {
-        if (i < stepDist[s]) { lastStep = s + 1; break; }
-      }
-      return { lastStep, completed: i < 12 };
-    })
-  ];
-
-  const demoLeads = [
-    { id: 'd1',  contactName: 'James Mitchell',  contactEmail: 'james@mitchellplumbing.co.uk', problem: "I spend hours every week chasing invoices and following up with clients who haven't paid. It never seems to get better.",                           contactPhone: '+44 7911 123456', submittedAt: '2026-04-18T09:23:00Z', status: 'new',       bookedCall: true },
-    { id: 'd2',  contactName: 'Sarah Chen',       contactEmail: 'sarah@chendesign.co.uk',       problem: "Writing client proposals. Each one takes me 2–3 hours and half of them don't convert. I need a faster way to produce them.",                               contactPhone: '+44 7922 234567', submittedAt: '2026-04-17T14:05:00Z', status: 'qualified', crmStatus: 'contacted', bookedCall: true },
-    { id: 'd3',  contactName: 'Marcus Williams',  contactEmail: 'marcus@mwfitness.com',         problem: "I schedule sessions and send reminders manually. My clients forget and I'm constantly texting to confirm. Needs to be automated.",                          contactPhone: '+44 7933 345678', submittedAt: '2026-04-16T11:30:00Z', status: 'new',       bookedCall: false },
-    { id: 'd4',  contactName: 'Priya Patel',      contactEmail: 'priya@curryhouse.co.uk',       problem: "Replying to the same questions on WhatsApp and Instagram about our menu and opening hours. It's all day, every day and I can't keep up.",                   contactPhone: '+44 7944 456789', submittedAt: '2026-04-15T18:20:00Z', status: 'qualified', crmStatus: 'in-progress', bookedCall: true },
-    { id: 'd5',  contactName: 'Tom Brady',        contactEmail: 'tom@bradylegal.co.uk',         problem: "Summarising documents and drafting initial client letters from scratch every single time. It takes too long and I need a smarter system.",                   contactPhone: '+44 7955 567890', submittedAt: '2026-04-14T10:15:00Z', status: 'qualified', crmStatus: 'to-contact', bookedCall: false },
-    { id: 'd6',  contactName: 'Emma Thompson',    contactEmail: 'emma@etcreative.co.uk',        problem: "Writing social media captions and blog posts for 8 clients every day. It takes up most of our team's time and blocks us from doing more strategic work.",    contactPhone: '+44 7966 678901', submittedAt: '2026-04-13T15:45:00Z', status: 'new',       bookedCall: false },
-    { id: 'd7',  contactName: 'David Kim',        contactEmail: 'david@kimaccounting.co.uk',    problem: "I explain the same tax concepts to new clients over and over again in meetings. I want a way to handle this without my time.",                               contactPhone: '+44 7977 789012', submittedAt: '2026-04-12T09:00:00Z', status: 'archived',  bookedCall: false },
-    { id: 'd8',  contactName: 'Lisa Johnson',     contactEmail: 'lisa@ljvirtual.co.uk',         problem: "Email management for clients — sorting, responding to routine emails, scheduling. It's hours every day and I can't scale without fixing this.",              contactPhone: '+44 7988 890123', submittedAt: '2026-04-11T13:30:00Z', status: 'new',       bookedCall: false },
-    { id: 'd9',  contactName: "Ryan O'Brien",     contactEmail: 'ryan@obrienconst.ie',          problem: "Creating quotes and estimates for every job from scratch. Each one is different and takes a long time. I lose work because I'm too slow to respond.",        contactPhone: '+44 7999 901234', submittedAt: '2026-04-10T11:00:00Z', status: 'new',       bookedCall: true },
-    { id: 'd10', contactName: 'Amara Okafor',     contactEmail: 'amara@beautybyamara.co.uk',    problem: "Booking appointments through Instagram DMs. People message at midnight and by morning I've missed them or they've booked somewhere else.",                   contactPhone: '+44 7900 012345', submittedAt: '2026-04-09T16:00:00Z', status: 'qualified', crmStatus: 'to-contact', bookedCall: true },
-    { id: 'd11', contactName: 'Chris Foster',     contactEmail: 'chris@fosterphoto.co.uk',      problem: "Culling and editing hundreds of photos after every shoot. I spend more time in Lightroom than I do shooting. I need a faster culling process.",              contactPhone: '+44 7911 111222', submittedAt: '2026-04-08T10:30:00Z', status: 'new',       bookedCall: false },
-    { id: 'd12', contactName: 'Sophie Walsh',     contactEmail: 'sophie@walshrealestate.co.uk', problem: "Writing property descriptions for 20+ listings at a time. They all need unique copy and it takes me or my team a full day every week.",                     contactPhone: '+44 7922 222333', submittedAt: '2026-04-07T14:00:00Z', status: 'new',       bookedCall: false },
-  ];
-
-  newLeads       = demoLeads.filter(l => !l.status || l.status === 'new');
-  qualifiedLeads = demoLeads.filter(l => l.status === 'qualified');
-  archivedLeads  = demoLeads.filter(l => l.status === 'archived');
-
-  adEntries = [
-    { id: 'da1', platform: 'google', period: 'Apr 2026', spend: 120,  clicks: 340,  impressions: 8500,  leads: 4, createdAt: '2026-04-18T10:00:00Z' },
-    { id: 'da2', platform: 'meta',   period: 'Apr 2026', spend: 80,   clicks: 210,  impressions: 12000, leads: 2, createdAt: '2026-04-15T10:00:00Z' },
-    { id: 'da3', platform: 'google', period: 'Mar 2026', spend: 95,   clicks: 280,  impressions: 7200,  leads: 3, createdAt: '2026-03-25T10:00:00Z' },
-  ];
-
-  updateBadges();
-  renderStats(demoSessions, demoLeads);
-  renderFunnel(demoSessions);
-  renderRevenueBreakdown(demoLeads);
-  renderAdsTab();
-  applyFiltersNew();
-  applyFiltersQualified();
-  applyFiltersArchived();
-}
-
 // ─── Helpers ──────────────────────────────────────────────────────
 function toggleExpand(id, btn) {
   const el      = document.getElementById(id);
@@ -489,12 +430,8 @@ async function handleAdsSave() {
 
   const entry = { platform, period, spend, clicks, impressions, leads, createdAt: new Date().toISOString() };
 
-  if (!isDemo) {
-    const docRef = await db.collection('ai-business-ads').add(entry);
-    adEntries.push({ id: docRef.id, ...entry });
-  } else {
-    adEntries.push({ id: 'demo-' + Date.now(), ...entry });
-  }
+  const docRef = await db.collection('ai-business-ads').add(entry);
+  adEntries.push({ id: docRef.id, ...entry });
 
   document.getElementById('adsPeriod').value      = '';
   document.getElementById('adsSpend').value        = '';
@@ -692,14 +629,11 @@ async function clearAllData() {
   btn.textContent = 'Clear all data';
   btn.disabled = false;
 
-  isDemo = false;
   loadDashboard();
 }
 
 async function deleteAdEntry(id) {
-  if (!isDemo) {
-    await db.collection('ai-business-ads').doc(id).delete();
-  }
+  await db.collection('ai-business-ads').doc(id).delete();
   adEntries = adEntries.filter(e => e.id !== id);
   renderAdsTab();
 }
