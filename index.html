@@ -381,7 +381,11 @@ class Component extends DCLogic {
         if (isLastStep) { this._submit(); }
         else {
           this._trackStep(step + 1);
-          this._updateSession(step + 2);
+          if (step === 1) {
+            this._ensureSession({ contactName: this.state.data.name || '', contactEmail: this.state.data.email || '' });
+          } else if (this._sessionId) {
+            this._updateSession(step + 2);
+          }
           this.setState((s) => ({ step: s.step + 1, submitError: null }));
         }
       },
@@ -433,7 +437,7 @@ class Component extends DCLogic {
   }
 
   _openForm() {
-    this._startSession();
+    this._sessionId = null;
     this.setState({ open: true, step: 0, data: {}, confirmOpen: false, submitError: null });
   }
 
@@ -491,14 +495,13 @@ class Component extends DCLogic {
     }
   }
 
-  _startSession() {
-    if (!window.firebase) return;
-    this._sessionId = null;
-    window.firebase.firestore().collection('ai-business-sessions').add({
+  _ensureSession(extra) {
+    if (!window.firebase || this._sessionId) return;
+    window.firebase.firestore().collection('ai-business-sessions').add(Object.assign({
       startedAt: new Date().toISOString(),
-      lastStep:  1,
+      lastStep:  2,
       completed: false
-    }).then(ref => { this._sessionId = ref.id; }).catch(() => {});
+    }, extra)).then(ref => { this._sessionId = ref.id; }).catch(() => {});
   }
 
   _updateSession(step) {
