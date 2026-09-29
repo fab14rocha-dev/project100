@@ -103,13 +103,18 @@ async function loadDashboard() {
   if (isDemo) return;
   document.getElementById('lastUpdated').textContent = 'Loading...';
 
-  const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
-
-  const [sessions, leads, ads] = await Promise.all([
-    db.collection('ai-business-sessions').where('startedAt', '>=', ninetyDaysAgo).get(),
-    db.collection('ai-business-leads').get(),
-    db.collection('ai-business-ads').get()
-  ]);
+  let sessions, leads, ads;
+  try {
+    [sessions, leads, ads] = await Promise.all([
+      db.collection('ai-business-sessions').get(),
+      db.collection('ai-business-leads').get(),
+      db.collection('ai-business-ads').get()
+    ]);
+  } catch (err) {
+    console.error('loadDashboard failed:', err);
+    document.getElementById('lastUpdated').textContent = 'Failed to load: ' + err.message;
+    return;
+  }
 
   const sessionDocs = sessions.docs.map(d => ({ id: d.id, ...d.data() }));
   const leadDocs    = leads.docs.map(d => ({ id: d.id, ...d.data() }));
