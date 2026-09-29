@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin — AI for Business</title>
+  <title>Admin — Project 100</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
@@ -579,7 +579,7 @@
       color: var(--text-muted);
     }
 
-    .ads-input, .ads-select {
+    .ads-input, .ads-select, .ads-textarea {
       background: var(--bg-surface);
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -592,8 +592,11 @@
       width: 120px;
     }
 
-    .ads-input:focus, .ads-select:focus { border-color: var(--accent); }
-    .ads-input::placeholder { color: var(--text-dim); }
+    .ads-select { width: 190px; }
+    .ads-textarea { resize: vertical; min-height: 60px; font-family: inherit; }
+
+    .ads-input:focus, .ads-select:focus, .ads-textarea:focus { border-color: var(--accent); }
+    .ads-input::placeholder, .ads-textarea::placeholder { color: var(--text-dim); }
     .ads-select option { background: var(--bg-surface); }
     .ads-input.wide { width: 150px; }
 
@@ -1120,12 +1123,11 @@
 
     <div class="topbar">
       <div>
-        <div class="topbar-logo">AI for Business — Admin</div>
+        <div class="topbar-logo">Project 100 — Admin</div>
         <div class="topbar-sub" id="lastUpdated">Loading...</div>
       </div>
       <div style="display:flex;gap:8px;">
         <button class="refresh-btn" id="refreshBtn">↺ Refresh</button>
-        <button class="refresh-btn" id="clearBtn" style="color:#F87171;border-color:rgba(248,113,113,0.25);">Clear all data</button>
         <button class="refresh-btn" id="signOutBtn" style="color:#888;border-color:rgba(136,136,136,0.25);">Sign out</button>
       </div>
     </div>
@@ -1133,6 +1135,7 @@
     <!-- Tabs -->
     <div class="tabs">
       <button class="tab-btn active" data-tab="summary">Summary</button>
+      <button class="tab-btn" data-tab="reachouts">Reach outs <span class="tab-badge" id="badge-reachouts">0</span></button>
       <button class="tab-btn" data-tab="leads">New leads <span class="tab-badge" id="badge-leads">0</span></button>
       <button class="tab-btn" data-tab="qualified">Qualified <span class="tab-badge" id="badge-qualified">0</span></button>
       <button class="tab-btn" data-tab="archived">Archived <span class="tab-badge" id="badge-archived">0</span></button>
@@ -1145,6 +1148,12 @@
 
       <!-- TAB 1: Summary -->
       <div class="tab-panel active" id="tab-summary">
+
+        <div class="leads-toolbar">
+          <input type="month" class="filter-search" id="summaryPeriod" style="width:170px;"/>
+          <button class="refresh-btn" id="summaryPeriodClear">All time</button>
+          <span class="filter-count" id="summaryPeriodLabel">Showing all time</span>
+        </div>
 
         <div class="stats-row">
           <div class="stat-card">
@@ -1174,6 +1183,33 @@
           <div class="loading">Loading funnel data...</div>
         </div>
 
+        <p class="section-title" style="margin-top:32px;">Reach outs</p>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Logged</div>
+            <div class="stat-value accent" id="roStatTotal">—</div>
+            <div class="stat-sub">people you've reached out to</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Still to reach out</div>
+            <div class="stat-value" id="roStatQueue">—</div>
+            <div class="stat-sub">logged but not contacted yet</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Replies</div>
+            <div class="stat-value green" id="roStatReplies">—</div>
+            <div class="stat-sub">replied, booked, or became a lead</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Reply rate</div>
+            <div class="stat-value" id="roStatRate">—</div>
+            <div class="stat-sub">of people actually contacted</div>
+          </div>
+        </div>
+
+        <div class="funnel-card" id="reachOutBreakdownCard">
+          <div class="loading">Loading...</div>
+        </div>
 
       </div>
 
@@ -1226,7 +1262,74 @@
         </div>
       </div>
 
-      <!-- TAB 6: Ads -->
+      <!-- TAB 6: Reach outs -->
+      <div class="tab-panel" id="tab-reachouts">
+        <p class="section-title">Reach outs</p>
+        <p style="font-size:13px;color:var(--text-muted);margin:-8px 0 20px;">People you've personally messaged or asked for an intro. Log it here so nothing falls through the cracks.</p>
+
+        <div class="ads-add-card">
+          <div class="ads-add-title" id="roFormTitle">Log a reach out</div>
+          <div class="ads-form-row">
+            <div class="ads-field">
+              <label>Name</label>
+              <input type="text" class="ads-input wide" id="roName" placeholder="Who did you contact?"/>
+            </div>
+            <div class="ads-field">
+              <label>Channel</label>
+              <select class="ads-select" id="roChannel">
+                <option value="warm-outreach">Warm outreach</option>
+                <option value="referral">Referral</option>
+                <option value="content">Content reply</option>
+                <option value="cold-outreach">Cold outreach</option>
+              </select>
+            </div>
+            <div class="ads-field">
+              <label>Status</label>
+              <select class="ads-select" id="roStatus">
+                <option value="to-reach-out">To reach out</option>
+                <option value="sent">Sent</option>
+                <option value="replied">Replied</option>
+                <option value="booked">Booked call</option>
+                <option value="lead">Became a lead</option>
+                <option value="no-response">No response</option>
+              </select>
+            </div>
+            <div class="ads-field" style="flex:1;min-width:220px;">
+              <label>Notes (optional)</label>
+              <textarea class="ads-textarea" style="width:100%;" id="roNotes" rows="1" placeholder="What did you say? Any context"></textarea>
+            </div>
+            <button class="ads-save-btn" id="roSaveBtn">Add entry</button>
+            <button class="refresh-btn" id="roCancelBtn" style="display:none;align-self:flex-end;">Cancel</button>
+          </div>
+        </div>
+
+        <div class="leads-toolbar">
+          <input type="text" class="filter-search" id="filterSearchRO" placeholder="Search name or notes..."/>
+          <select class="filter-select" id="filterStatusRO">
+            <option value="">All statuses</option>
+            <option value="to-reach-out">To reach out</option>
+            <option value="sent">Sent</option>
+            <option value="replied">Replied</option>
+            <option value="booked">Booked call</option>
+            <option value="lead">Became a lead</option>
+            <option value="no-response">No response</option>
+          </select>
+          <select class="filter-select" id="filterChannelRO">
+            <option value="">All channels</option>
+            <option value="warm-outreach">Warm outreach</option>
+            <option value="referral">Referral</option>
+            <option value="content">Content reply</option>
+            <option value="cold-outreach">Cold outreach</option>
+          </select>
+          <span class="filter-count" id="filterCountRO"></span>
+        </div>
+
+        <div class="ads-table-wrap">
+          <div id="reachOutsContainer"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 7: Ads -->
       <div class="tab-panel" id="tab-ads">
         <p class="section-title">Ad spend tracker</p>
 
@@ -1294,7 +1397,7 @@
         </div>
       </div>
 
-      <!-- TAB 7: Projects -->
+      <!-- TAB 8: Projects -->
       <div class="tab-panel" id="tab-projects">
         <div class="projects-toolbar">
           <p class="section-title" style="margin-bottom:0;">Project tracker</p>

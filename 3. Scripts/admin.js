@@ -18,6 +18,9 @@ let qualifiedLeads  = [];
 let archivedLeads   = [];
 let partialLeads    = [];
 let adEntries       = [];
+let reachOuts       = [];
+let allSessions     = [];
+let allLeads        = [];
 
 // ─── Login ────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -60,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('refreshBtn').addEventListener('click', loadDashboard);
-  document.getElementById('clearBtn').addEventListener('click', clearAllData);
 
   // Tab switching
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -84,8 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Filters — partial
   document.getElementById('filterSearchP').addEventListener('input', applyFiltersPartial);
 
+  // Filters — reach outs
+  document.getElementById('filterSearchRO').addEventListener('input', applyFiltersReachOuts);
+  document.getElementById('filterStatusRO').addEventListener('change', applyFiltersReachOuts);
+  document.getElementById('filterChannelRO').addEventListener('change', applyFiltersReachOuts);
+
+  // Summary period
+  document.getElementById('summaryPeriod').addEventListener('change', applySummaryPeriod);
+  document.getElementById('summaryPeriodClear').addEventListener('click', () => {
+    document.getElementById('summaryPeriod').value = '';
+    applySummaryPeriod();
+  });
+
   // Ads entry
   document.getElementById('adsSaveBtn').addEventListener('click', handleAdsSave);
+  document.getElementById('roSaveBtn').addEventListener('click', handleReachOutSave);
+  document.getElementById('roCancelBtn').addEventListener('click', cancelReachOutEdit);
 
   initProjectsTab();
 });
@@ -94,12 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadDashboard() {
   document.getElementById('lastUpdated').textContent = 'Loading...';
 
-  let sessions, leads, ads;
+  let sessions, leads, ads, reachOutsSnap;
   try {
-    [sessions, leads, ads] = await Promise.all([
+    [sessions, leads, ads, reachOutsSnap] = await Promise.all([
       db.collection('ai-business-sessions').get(),
       db.collection('ai-business-leads').get(),
-      db.collection('ai-business-ads').get()
+      db.collection('ai-business-ads').get(),
+      db.collection('ai-business-reachouts').get()
     ]);
   } catch (err) {
     console.error('loadDashboard failed:', err);
@@ -110,6 +127,8 @@ async function loadDashboard() {
   const sessionDocs = sessions.docs.map(d => ({ id: d.id, ...d.data() }));
   const leadDocs    = leads.docs.map(d => ({ id: d.id, ...d.data() }));
 
+  allSessions    = sessionDocs;
+  allLeads       = leadDocs;
   newLeads       = leadDocs.filter(l => !l.status || l.status === 'new');
   qualifiedLeads = leadDocs.filter(l => l.status === 'qualified');
   archivedLeads  = leadDocs.filter(l => l.status === 'archived');
@@ -117,11 +136,12 @@ async function loadDashboard() {
     .filter(s => !s.completed && s.contactEmail)
     .sort((a, b) => (b.startedAt || '').localeCompare(a.startedAt || ''));
   adEntries      = ads.docs.map(d => ({ id: d.id, ...d.data() }));
+  reachOuts      = reachOutsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   updateBadges();
-  renderStats(sessionDocs.map(d => d), leadDocs);
-  renderFunnel(sessionDocs.map(d => d));
+  applySummaryPeriod();
   renderAdsTab();
+  renderReachOutsTab();
   applyFiltersNew();
   applyFiltersQualified();
   applyFiltersArchived();
@@ -138,6 +158,24 @@ function updateBadges() {
   document.getElementById('badge-qualified').textContent = qualifiedLeads.length;
   document.getElementById('badge-archived').textContent  = archivedLeads.length;
   document.getElementById('badge-partial').textContent   = partialLeads.filter(s => !s.followedUp).length;
+  document.getElementById('badge-reachouts').textContent = reachOuts.length;
+}
+
+// ─── Summary period filter ──────────────────────────────────────────
+function applySummaryPeriod() {
+  const period = document.getElementById('summaryPeriod').value; // '' or 'YYYY-MM'
+
+  const sessions = period ? allSessions.filter(s => (s.startedAt    || '').slice(0, 7) === period) : allSessions;
+  const leads    = period ? allLeads.filter(l    => (l.submittedAt  || '').slice(0, 7) === period) : allLeads;
+  const ros      = period ? reachOuts.filter(r   => (r.createdAt    || '').slice(0, 7) === period) : reachOuts;
+
+  document.getElementById('summaryPeriodLabel').textContent = period
+    ? 'Showing ' + new Date(period + '-02').toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+    : 'Showing all time';
+
+  renderStats(sessions, leads);
+  renderFunnel(sessions);
+  renderReachOutStats(ros);
 }
 
 // ─── Stats cards ──────────────────────────────────────────────────
@@ -223,6 +261,58 @@ function renderFunnel(sessions) {
         <div class="funnel-pct" style="color:${fromPrevColor};font-weight:600;">
           ${idx === 0 ? '—' : fromPrev + '%'}
         </div>
+      </div>`;
+  });
+
+  card.innerHTML = html;
+}
+
+// ─── Reach out stats (Summary tab) ─────────────────────────────────
+function renderReachOutStats(list) {
+  const total   = list.length;
+  const queue   = list.filter(r => r.status === 'to-reach-out').length;
+  const replies = list.filter(r => ['replied', 'booked', 'lead'].includes(r.status)).length;
+  const contacted = total - queue;
+  const rate    = contacted > 0 ? Math.round((replies / contacted) * 100) : 0;
+
+  document.getElementById('roStatTotal').textContent   = total;
+  document.getElementById('roStatQueue').textContent   = queue;
+  document.getElementById('roStatReplies').textContent = replies;
+  document.getElementById('roStatRate').textContent    = contacted > 0 ? rate + '%' : '—';
+
+  const card = document.getElementById('reachOutBreakdownCard');
+  if (total === 0) {
+    card.innerHTML = '<div class="empty">No reach outs logged yet.</div>';
+    return;
+  }
+
+  const statusOptions = [
+    ['to-reach-out', 'To reach out'], ['sent', 'Sent'], ['replied', 'Replied'],
+    ['booked', 'Booked call'], ['lead', 'Became a lead'], ['no-response', 'No response']
+  ];
+
+  let html = `
+    <div class="funnel-header">
+      <span>Status</span>
+      <span></span>
+      <span>Count</span>
+      <span>Of total</span>
+      <span></span>
+    </div>`;
+
+  statusOptions.forEach(([val, label]) => {
+    const count = list.filter(r => r.status === val).length;
+    const pct   = total > 0 ? Math.round((count / total) * 100) : 0;
+    const rowClass = val === 'lead' ? 'completed' : (val === 'no-response' && pct > 40 ? 'drop' : '');
+    html += `
+      <div class="funnel-row ${rowClass}">
+        <div class="funnel-label">${label}</div>
+        <div class="funnel-bar-track">
+          <div class="funnel-bar-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="funnel-count">${count}</div>
+        <div class="funnel-pct">${pct}%</div>
+        <div class="funnel-pct"></div>
       </div>`;
   });
 
@@ -407,6 +497,12 @@ function toggleExpand(id, btn) {
   btn.textContent = expanded ? 'Show less' : 'Read more';
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
 // ─── Ads tab ──────────────────────────────────────────────────────
 async function handleAdsSave() {
   const platform    = document.getElementById('adsPlatform').value;
@@ -512,6 +608,190 @@ function renderAdsTab() {
     </table>`;
 }
 
+// ─── Reach outs tab ───────────────────────────────────────────────
+let editingReachOutId = null;
+
+function readReachOutForm() {
+  return {
+    name:    document.getElementById('roName').value.trim(),
+    channel: document.getElementById('roChannel').value,
+    status:  document.getElementById('roStatus').value,
+    notes:   document.getElementById('roNotes').value.trim()
+  };
+}
+
+function resetReachOutForm() {
+  document.getElementById('roName').value    = '';
+  document.getElementById('roNotes').value   = '';
+  document.getElementById('roChannel').value = 'warm-outreach';
+  document.getElementById('roStatus').value  = 'to-reach-out';
+}
+
+async function handleReachOutSave() {
+  const { name, channel, status, notes } = readReachOutForm();
+
+  if (!name) {
+    const el = document.getElementById('roName');
+    el.style.borderColor = 'var(--red)';
+    setTimeout(() => { el.style.borderColor = ''; }, 1500);
+    return;
+  }
+
+  const btn = document.getElementById('roSaveBtn');
+  const now = new Date().toISOString();
+
+  if (editingReachOutId) {
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const id = editingReachOutId;
+    const updates = { name, channel, status, notes, lastActionAt: now };
+    await db.collection('ai-business-reachouts').doc(id).update(updates);
+    const entry = reachOuts.find(r => r.id === id);
+    if (entry) Object.assign(entry, updates);
+
+    cancelReachOutEdit();
+  } else {
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const entry = { name, channel, status, notes, createdAt: now, lastActionAt: now };
+    const docRef = await db.collection('ai-business-reachouts').add(entry);
+    reachOuts.push({ id: docRef.id, ...entry });
+
+    resetReachOutForm();
+    btn.textContent = 'Add entry';
+    btn.disabled = false;
+  }
+
+  updateBadges();
+  applyFiltersReachOuts();
+}
+
+function startEditReachOut(id) {
+  const entry = reachOuts.find(r => r.id === id);
+  if (!entry) return;
+
+  editingReachOutId = id;
+  document.getElementById('roName').value    = entry.name    || '';
+  document.getElementById('roChannel').value = entry.channel || 'warm-outreach';
+  document.getElementById('roStatus').value  = entry.status  || 'to-reach-out';
+  document.getElementById('roNotes').value   = entry.notes   || '';
+
+  document.getElementById('roFormTitle').textContent = 'Edit reach out';
+  document.getElementById('roSaveBtn').textContent    = 'Save changes';
+  document.getElementById('roCancelBtn').style.display = '';
+
+  document.getElementById('roName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelReachOutEdit() {
+  editingReachOutId = null;
+  resetReachOutForm();
+  document.getElementById('roFormTitle').textContent = 'Log a reach out';
+  document.getElementById('roSaveBtn').textContent    = 'Add entry';
+  document.getElementById('roSaveBtn').disabled       = false;
+  document.getElementById('roCancelBtn').style.display = 'none';
+}
+
+async function updateReachOutStatus(id, select) {
+  const val = select.value;
+  const now = new Date().toISOString();
+  await db.collection('ai-business-reachouts').doc(id).update({ status: val, lastActionAt: now });
+  const entry = reachOuts.find(r => r.id === id);
+  if (entry) { entry.status = val; entry.lastActionAt = now; }
+  applyFiltersReachOuts();
+}
+
+async function deleteReachOut(id) {
+  await db.collection('ai-business-reachouts').doc(id).delete();
+  reachOuts = reachOuts.filter(r => r.id !== id);
+  if (editingReachOutId === id) cancelReachOutEdit();
+  updateBadges();
+  applyFiltersReachOuts();
+}
+
+function applyFiltersReachOuts() {
+  const search  = document.getElementById('filterSearchRO').value.toLowerCase().trim();
+  const status  = document.getElementById('filterStatusRO').value;
+  const channel = document.getElementById('filterChannelRO').value;
+
+  const filtered = reachOuts.filter(r => {
+    if (status  && r.status  !== status)  return false;
+    if (channel && r.channel !== channel) return false;
+    if (search  && ![r.name, r.notes].some(v => (v || '').toLowerCase().includes(search))) return false;
+    return true;
+  });
+
+  document.getElementById('filterCountRO').textContent = filtered.length + ' of ' + reachOuts.length;
+  renderReachOutsTable(filtered);
+  applySummaryPeriod();
+}
+
+function renderReachOutsTab() {
+  applyFiltersReachOuts();
+}
+
+function renderReachOutsTable(list) {
+  const container = document.getElementById('reachOutsContainer');
+
+  if (reachOuts.length === 0) {
+    container.innerHTML = '<div class="empty">No reach outs logged yet. Add your first one above.</div>';
+    return;
+  }
+  if (list.length === 0) {
+    container.innerHTML = '<div class="empty">No reach outs match this filter.</div>';
+    return;
+  }
+
+  const channelLabels = { 'warm-outreach': 'Warm outreach', referral: 'Referral', content: 'Content reply', 'cold-outreach': 'Cold outreach' };
+  const statusOptions = [
+    ['to-reach-out', 'To reach out'], ['sent', 'Sent'], ['replied', 'Replied'],
+    ['booked', 'Booked call'], ['lead', 'Became a lead'], ['no-response', 'No response']
+  ];
+
+  const sorted = [...list].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+
+  const rows = sorted.map(r => {
+    const logged     = r.createdAt    ? new Date(r.createdAt).toLocaleDateString()    : '—';
+    const lastAction = r.lastActionAt ? new Date(r.lastActionAt).toLocaleDateString() : logged;
+    const options = statusOptions.map(([val, label]) =>
+      `<option value="${val}" ${r.status === val ? 'selected' : ''}>${label}</option>`
+    ).join('');
+    return `
+      <tr>
+        <td>${logged}</td>
+        <td>${r.name || '—'}</td>
+        <td>${channelLabels[r.channel] || r.channel || '—'}</td>
+        <td><select class="ads-select" onchange="updateReachOutStatus('${r.id}', this)">${options}</select></td>
+        <td>${lastAction}</td>
+        <td style="white-space:pre-wrap;">${escapeHtml(r.notes)}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="action-delete" onclick="startEditReachOut('${r.id}')">Edit</button>
+            <button class="action-delete" onclick="deleteReachOut('${r.id}')">Delete</button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  container.innerHTML = `
+    <table class="ads-table">
+      <thead>
+        <tr>
+          <th>Logged</th>
+          <th>Name</th>
+          <th>Channel</th>
+          <th>Status</th>
+          <th>Last action</th>
+          <th>Notes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
 // ─── Partial tab ──────────────────────────────────────────────────
 function applyFiltersPartial() {
   const search = document.getElementById('filterSearchP').value.toLowerCase().trim();
@@ -602,34 +882,6 @@ async function togglePartialFollowedUp(id, btn) {
   btn.textContent      = isNow ? '✓ Followed up' : '— Not yet';
   btn.closest('tr').style.opacity = isNow ? '0.45' : '1';
   updateBadges();
-}
-
-async function clearAllData() {
-  const confirmed = window.confirm('Delete ALL leads, sessions, and ads? This cannot be undone.');
-  if (!confirmed) return;
-
-  const btn = document.getElementById('clearBtn');
-  btn.textContent = 'Clearing...';
-  btn.disabled = true;
-
-  const [leads, sessions, ads] = await Promise.all([
-    db.collection('ai-business-leads').get(),
-    db.collection('ai-business-sessions').get(),
-    db.collection('ai-business-ads').get(),
-  ]);
-
-  const deletes = [
-    ...leads.docs.map(d => d.ref.delete()),
-    ...sessions.docs.map(d => d.ref.delete()),
-    ...ads.docs.map(d => d.ref.delete()),
-  ];
-
-  await Promise.all(deletes);
-
-  btn.textContent = 'Clear all data';
-  btn.disabled = false;
-
-  loadDashboard();
 }
 
 async function deleteAdEntry(id) {
