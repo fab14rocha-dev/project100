@@ -45,3 +45,4 @@ Simple goal: help 100 people. 100 different problems, 100 different solutions. F
 - Keep it simple and human — no jargon, no hype
 - AI is the tool, not the product. Lead with the problem, not the technology
 - The tone matches the Facebook post that got traction: honest, personal, no em dashes
+- Do not `git push` to this project's repo unless Fabricio explicitly says so. Commit locally as normal, but hold the push. For changes he'll want to see first, run a local static server (e.g. `python -m http.server`) and give him the localhost URL to preview before deploying
